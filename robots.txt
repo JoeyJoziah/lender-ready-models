@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lender-ready-models.onrender.com/sitemap.xml

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why DSCR Binds Before LTV When Rates Rise</title>
+<meta name="description" content="A worked example of how a 1.25x DSCR floor overtakes a 70% LTV cap as interest rates climb, using a 48-unit multifamily sizing case. Includes the crossover rate.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/why-dscr-binds-before-ltv-when-rates-rise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why DSCR Binds Before LTV When Rates Rise">
+<meta property="og:description" content="A worked example of how a 1.25x DSCR floor overtakes a 70% LTV cap as interest rates climb, using a 48-unit multifamily sizing case. Includes the crossover rate.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<article class="post">
+<div class="eyebrow">Debt sizing</div>
+<h1>Why DSCR Binds Before LTV When Rates Rise</h1>
+<p class="meta">Worked example from the DSCR Debt Sizing Model example case · 48 units · $6.4M price</p>
+
+<p>Ask a borrower how much a lender will give them and the first answer is almost always a loan-to-value number. "They'll go to 70 percent." It was a reasonable shorthand for most of the 2010s, when interest rates were low enough that the LTV cap was usually the constraint that mattered. It is a poor shorthand today. When rates rise, the debt service coverage ratio takes over long before the LTV cap is reached, and the loan proceeds a property supports fall with every basis point. This article shows exactly why, with numbers you can reproduce.</p>
+
+<h2>Three constraints, one answer</h2>
+<p>A commercial real estate lender sizes a loan three ways and takes the smallest result:</p>
+<ul>
+<li><strong>Loan-to-value (LTV):</strong> value × maximum LTV. Depends on price (or appraised value) and nothing else.</li>
+<li><strong>Debt service coverage ratio (DSCR):</strong> the loan whose annual debt service equals NOI ÷ minimum DSCR. Depends on NOI, the interest rate and the amortization term.</li>
+<li><strong>Debt yield:</strong> NOI ÷ minimum debt yield. Depends on NOI only.</li>
+</ul>
+<p>Only one of the three moves when rates move: DSCR. That is the entire story. The LTV loan is fixed by the price, the debt yield loan is fixed by the NOI, and the DSCR loan shrinks as the cost of servicing each borrowed dollar rises.</p>
+
+<h2>The example case</h2>
+<p>The example property in the debt sizing template is a 48-unit apartment building bought for $6,400,000. After vacancy, concessions, eight expense lines, a 3 percent management fee and $300 per unit in reserves, stabilized NOI is $382,764. The going-in cap rate is 5.98 percent. The lender's box is a 70 percent maximum LTV, a 1.25x minimum DSCR tested on a 30-year amortizing payment, and an 8.5 percent minimum debt yield. The quoted rate is 6.75 percent fixed.</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Constraint</th><th>Lender limit</th><th>Maximum loan</th><th>Binding?</th></tr></thead>
+<tbody>
+<tr><td>Loan-to-value</td><td>70%</td><td>$4,480,000</td><td></td></tr>
+<tr class="hl"><td>DSCR (amortizing)</td><td>1.25x</td><td>$3,934,265</td><td>Binding</td></tr>
+<tr><td>Debt yield</td><td>8.5%</td><td>$4,503,100</td><td></td></tr>
+</tbody></table></div>
+
+<p>The DSCR loan is $546,000 below the LTV loan. The lender rounds down to $3,934,000, which works out to a 61.5 percent LTV and a 9.73 percent debt yield. The borrower who walked in expecting 70 percent leverage has to find an extra half-million of equity, and the reason is arithmetic, not the lender's mood.</p>
+
+<h2>Where the DSCR loan comes from</h2>
+<p>The DSCR constraint is easiest to understand through the loan constant: the annual debt service per dollar borrowed on an amortizing basis. At 6.75 percent over 30 years the constant is 0.07783. So:</p>
+<div class="formula">DSCR loan = NOI ÷ (minimum DSCR × loan constant)<br>= $382,764 ÷ (1.25 × 0.07783)<br>= $3,934,265</div>
+<p>Every input in that formula is either fixed by the property (NOI) or fixed by the lender (1.25x), except the loan constant, which is a function of the rate. Raise the rate, raise the constant, shrink the loan. The relationship is not linear but it is close to it over the range that matters.</p>
+
+<h2>What happens as the rate moves</h2>
+<p>The template's sensitivity grid recomputes the maximum loan at seven rates and seven NOI levels, all from live formulas. Holding NOI at the base case, the column looks like this:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Interest rate</th><th>Maximum loan</th><th>Change vs 6.75%</th><th>Implied LTV</th></tr></thead>
+<tbody>
+<tr><td>6.00%</td><td>$4,256,000</td><td>+$322,000</td><td>66.5%</td></tr>
+<tr><td>6.25%</td><td>$4,144,000</td><td>+$210,000</td><td>64.8%</td></tr>
+<tr><td>6.50%</td><td>$4,037,000</td><td>+$103,000</td><td>63.1%</td></tr>
+<tr class="hl"><td>6.75%</td><td>$3,934,000</td><td>base</td><td>61.5%</td></tr>
+<tr><td>7.00%</td><td>$3,835,000</td><td>−$99,000</td><td>59.9%</td></tr>
+<tr><td>7.25%</td><td>$3,740,000</td><td>−$194,000</td><td>58.4%</td></tr>
+<tr><td>7.50%</td><td>$3,649,000</td><td>−$285,000</td><td>57.0%</td></tr>
+</tbody></table></div>
+
+<p>Each 25 basis point step costs roughly $100,000 of proceeds on this deal, about 2.5 percent of the loan. Notice that at no rate in the grid does the loan reach the $4,480,000 LTV cap. At the base NOI, the 70 percent LTV is simply not reachable at any rate above about 5.5 percent.</p>
+
+<h2>The crossover rate</h2>
+<p>There is a specific rate at which the DSCR loan equals the LTV loan. Solving the DSCR formula for the loan constant that produces $4,480,000 gives 0.06835, which on a 30-year amortization corresponds to a rate of roughly 5.53 percent. Below that, LTV binds and the borrower gets their 70 percent. Above it, DSCR binds and every further increase comes straight out of proceeds. On this property, the market crossed that line a long time ago.</p>
+<p>The crossover depends on the cap rate as much as the interest rate. A property bought at a 5.98 percent cap, like this one, has thin NOI relative to its price, so the DSCR loan is small relative to the LTV loan. The same lender box on a property bought at a 7.5 percent cap would see LTV bind at a much higher interest rate, because there is more NOI per dollar of price to cover the debt service. The general rule: when the cap rate is below the loan constant divided by the minimum DSCR times the maximum LTV, DSCR binds. Here that threshold is 0.07783 × 1.25 × 0.70 = 6.81 percent, and the property's 5.98 percent cap rate is comfortably below it.</p>
+
+<h2>Why NOI growth only partly helps</h2>
+<p>The other axis of the grid is NOI. Reading across the 6.75 percent row, a 10 percent increase in NOI lifts the loan to $4,327,000, and 15 percent is needed before the LTV cap of $4,480,000 finally binds. A 10 percent decrease drops it to $3,540,000. NOI moves the loan roughly one-for-one in percentage terms, which is useful to know when a seller's pro forma is 10 percent above the trailing twelve months: that gap is worth about $390,000 of proceeds, and the lender is going to underwrite the trailing number.</p>
+
+<h2>What this means for a borrower</h2>
+<ul>
+<li><strong>Quote the DSCR loan, not the LTV loan, in your equity raise.</strong> If you model 70 percent leverage and the lender sizes at 61.5 percent, you are short $546,000 of equity at closing.</li>
+<li><strong>Negotiate the inputs that move the DSCR loan.</strong> A longer amortization lowers the constant. A lower minimum DSCR (1.20x instead of 1.25x) adds about 4 percent to proceeds. Underwritten NOI is worth arguing over line by line.</li>
+<li><strong>Do not expect an interest-only period to help.</strong> Most lenders test DSCR on the amortizing payment even during the IO period, which is why the template sizes that way. The IO period improves year-one cash flow, not loan size.</li>
+<li><strong>Re-run the sizing when the rate lock moves.</strong> A 50 basis point move between application and closing is a $194,000 change in proceeds on this deal. The dashboard in the template reports that number directly.</li>
+</ul>
+
+<h2>Checking your own deal</h2>
+<p>The whole analysis takes four numbers: NOI, price, the lender's three limits and the rate. Compute the loan constant for the quoted rate and amortization, divide NOI by the minimum DSCR times the constant, and compare the result with value times maximum LTV. If the DSCR figure is lower, you are in a DSCR-bound market for that asset, and the right question to ask a lender is not "what LTV will you go to" but "what rate and amortization are you sizing on."</p>
+
+<p class="pointer">The figures above come from the example case in the <strong>DSCR Debt Sizing &amp; Loan Underwriting Model</strong>, an Excel template that sizes a loan under all three constraints, flags the binding one, builds a 360-month amortization schedule with an interest-only period, and produces the two 7×7 sensitivity grids used here. It is available for $79 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>. Every cell is a live formula with no macros, so the crossover rate for your own deal is a matter of changing the inputs.</p>
+</article>
+<section class="more"><strong>More guides</strong><ul><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></section>
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>

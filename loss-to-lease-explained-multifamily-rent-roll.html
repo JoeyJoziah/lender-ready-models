@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss-to-Lease Explained: Reading a Multifamily Rent Roll</title>
+<meta name="description" content="What loss-to-lease means, how to compute it from a unit-level rent roll, and why economic occupancy and lease expirations matter as much as the headline number. Worked example.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/loss-to-lease-explained-multifamily-rent-roll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Loss-to-Lease Explained: Reading a Multifamily Rent Roll">
+<meta property="og:description" content="What loss-to-lease means, how to compute it from a unit-level rent roll, and why economic occupancy and lease expirations matter as much as the headline number. Worked example.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<article class="post">
+<div class="eyebrow">Rent roll analysis</div>
+<h1>Loss-to-Lease Explained: Reading a Multifamily Rent Roll</h1>
+<p class="meta">Worked example from the Rent Roll Analyzer example case · 48 units · analysis date 1 October 2026</p>
+
+<p>Loss-to-lease is the gap between what a property's tenants are paying and what the same units would rent for today. It is the single most-quoted number in a multifamily offering memorandum, usually presented as upside, and it is also the number most likely to be wrong. This article explains how it is computed from a unit-level rent roll, what it is actually worth, and the two related figures, economic occupancy and lease expiration exposure, that tell you whether the upside is real.</p>
+
+<h2>The definition</h2>
+<div class="formula">Loss-to-lease (per unit) = market rent − in-place rent, for occupied units<br>Loss-to-lease (property) = sum across occupied units</div>
+<p>Two things in that definition carry all the weight. First, "market rent" is an input, not a fact. It is your estimate of what a unit of that type would lease for to a new tenant today, and every dollar of loss-to-lease depends on it. Second, the calculation only applies to occupied units. A vacant unit has no in-place rent to be below market; it is vacancy loss, which is a different line.</p>
+<p>A positive number means in-place rents are below market and leases should roll up. A negative number means tenants are paying more than a new tenant would, which is common after a period of rent growth followed by a softening market, and means the roll is going to roll down.</p>
+
+<h2>A single unit</h2>
+<p>The rent roll in the example case has 48 units in five types. Take unit 102, a 460-square-foot studio. The tenant pays $1,075 a month on a lease that runs to 26 December 2026. The market rent for studios, set on the unit mix sheet, is $1,250. Loss-to-lease is $175 a month, or 16.3 percent of in-place rent. The lease expires in 2.8 months from the analysis date, so the unit lands in the 1-to-3-month rollover bucket.</p>
+<p>Unit 106, a 495-square-foot studio, pays $1,210 against the same $1,250 market. Loss-to-lease is $40, or 3.3 percent. Same unit type, same market rent, very different upside. This is why the number has to be built from the unit level rather than from an average: the average hides which leases carry the gap and when they come up.</p>
+
+<h2>Rolling up to unit type</h2>
+<p>The unit mix sheet aggregates the roll by type and compares the average in-place rent with the market rent input:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Unit type</th><th>Units</th><th>Occupied</th><th>Avg in-place</th><th>Market</th><th>LTL / unit</th><th>Monthly LTL</th></tr></thead>
+<tbody>
+<tr><td>Studio</td><td>6</td><td>5</td><td>$1,112</td><td>$1,250</td><td>$138</td><td>$690</td></tr>
+<tr><td>1BR/1BA</td><td>16</td><td>16</td><td>$1,385</td><td>$1,525</td><td>$140</td><td>$2,245</td></tr>
+<tr><td>2BR/1BA</td><td>10</td><td>9</td><td>$1,616</td><td>$1,795</td><td>$179</td><td>$1,615</td></tr>
+<tr><td>2BR/2BA</td><td>12</td><td>10</td><td>$1,734</td><td>$1,925</td><td>$191</td><td>$1,910</td></tr>
+<tr><td>3BR/2BA</td><td>4</td><td>4</td><td>$2,040</td><td>$2,250</td><td>$210</td><td>$630</td></tr>
+<tr class="hl"><td>Total</td><td>48</td><td>44</td><td>$1,528</td><td>$1,707</td><td>$179</td><td>$7,090</td></tr>
+</tbody></table></div>
+
+<p>Across the occupied units, in-place rent is $67,800 a month against a market rent for all 48 units of $81,950. The property is roughly 10 percent below market on a per-unit basis. That sounds like a clean story. The next two numbers complicate it.</p>
+
+<h2>Economic occupancy</h2>
+<div class="formula">Physical occupancy = occupied units ÷ total units<br>Economic occupancy = in-place rent collected ÷ market gross potential rent</div>
+<p>The example property has 44 of 48 units occupied, including one on notice: 91.7 percent physical occupancy. But the in-place rent of $67,800 is only 82.7 percent of the $81,950 the property would collect if every unit were leased at market. The nine-point gap between the two occupancy measures is the combined effect of vacancy and loss-to-lease, and it is the honest measure of how far the property is from its potential. A broker will quote the 91.7. A lender will compute the 82.7.</p>
+
+<h2>Lease expirations decide when the upside arrives</h2>
+<p>Loss-to-lease is only realized when a lease ends and the unit is re-let or renewed at market. The expiration schedule in the example case is concentrated:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Bucket</th><th>Units</th><th>% of units</th><th>Monthly rent at risk</th></tr></thead>
+<tbody>
+<tr><td>Vacant now</td><td>4</td><td>8.3%</td><td>$0</td></tr>
+<tr><td>0–1 month</td><td>1</td><td>2.1%</td><td>$2,085</td></tr>
+<tr><td>1–3 months</td><td>10</td><td>20.8%</td><td>$14,900</td></tr>
+<tr><td>3–6 months</td><td>13</td><td>27.1%</td><td>$20,540</td></tr>
+<tr><td>6–12 months</td><td>20</td><td>41.7%</td><td>$30,275</td></tr>
+<tr><td>12+ months</td><td>0</td><td>0%</td><td>$0</td></tr>
+</tbody></table></div>
+
+<p>Twenty-four units, half the property, roll within six months, carrying $37,525 of monthly rent. The loss-to-lease sitting in those near-term leases is $3,610 a month. That is good news for the mark-to-market case, since the upside arrives quickly, and bad news for the risk case, since half the rent roll is exposed to turnover, vacancy and re-leasing cost in the same window. A lender will ask about this concentration before they ask about anything else on the roll, because a 50 percent six-month rollover is a cash flow volatility problem whichever direction rents move.</p>
+
+<h2>From loss-to-lease to NOI and value</h2>
+<p>The analysis sheet in the template runs the pro forma twice. The in-place column starts from market gross potential rent of $983,400, deducts the loss-to-lease that the occupied-status units are currently leaving on the table, then vacancy at 6 percent, and adds other income of $60 per unit per month. The mark-to-market column skips the loss-to-lease deduction. Expenses are the same in both: $4,300 per unit of controllable costs, $118,000 of taxes, $42,000 of insurance, a 3 percent management fee and $300 per unit of reserves.</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th></th><th>In-place</th><th>Mark-to-market</th></tr></thead>
+<tbody>
+<tr><td>Effective gross income</td><td>$898,896</td><td>$958,956</td></tr>
+<tr><td>Net operating income</td><td>$491,129</td><td>$549,387</td></tr>
+<tr><td>Expense ratio</td><td>45.4%</td><td>42.7%</td></tr>
+<tr><td>Value at 6.25% cap rate</td><td>$7,858,066</td><td>$8,790,197</td></tr>
+</tbody></table></div>
+
+<p>The NOI uplift from rolling leases to market is $58,258, and at a 6.25 percent cap rate that is $932,131 of value, about $19,400 per unit. That is the number a seller's broker will put on the cover. Whether it is worth paying for depends on the questions above: is the market rent assumption defensible, how quickly do the leases roll, and what does it cost in vacancy and turnover to get there.</p>
+
+<h2>Three habits that keep loss-to-lease honest</h2>
+<ul>
+<li><strong>Test the market rent against the roll itself.</strong> The most recent leases signed are the best evidence of market. If the newest studio lease on the roll is at $1,210 and the market rent input is $1,250, the input is doing a lot of work.</li>
+<li><strong>Separate the statuses.</strong> Occupied, vacant, on notice, model and down units are not the same thing. Model and down units produce no rent and should not count in either occupancy measure as revenue. Notice units count as occupied today but are rollover inside 30 days.</li>
+<li><strong>Underwrite the timing.</strong> A dollar of loss-to-lease on a lease expiring in two months is worth more than a dollar on a lease expiring in eleven. The expiration schedule tells you how much of the upside is reachable in year one.</li>
+</ul>
+
+<p class="pointer">The figures above come from the example rent roll in the <strong>Multifamily Rent Roll Analyzer</strong>, an Excel template that takes a pasted unit-level roll of up to 150 units and produces per-unit loss-to-lease, physical and economic occupancy, expiration buckets with the six-month concentration, unit-mix economics, and in-place versus mark-to-market NOI and value. It is available for $69 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>. Set the market rents, paste your roll and the tables in this article rebuild for your property.</p>
+</article>
+<section class="more"><strong>More guides</strong><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></section>
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>

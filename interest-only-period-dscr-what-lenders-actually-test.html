@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interest-Only Periods and DSCR: What Lenders Actually Test</title>
+<meta name="description" content="Why most lenders size DSCR on the amortizing payment even during an interest-only period, how much leverage the IO convention would add, and what happens when IO ends. Worked example.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/interest-only-period-dscr-what-lenders-actually-test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Interest-Only Periods and DSCR: What Lenders Actually Test">
+<meta property="og:description" content="Why most lenders size DSCR on the amortizing payment even during an interest-only period, how much leverage the IO convention would add, and what happens when IO ends. Worked example.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<article class="post">
+<div class="eyebrow">Loan structure</div>
+<h1>Interest-Only Periods and DSCR: What Lenders Actually Test</h1>
+<p class="meta">Worked example from the DSCR Debt Sizing Model example case · $3,934,000 loan · 12 months IO · 30-year amortization</p>
+
+<p>An interest-only period is one of the most common features in a commercial mortgage and one of the most commonly misunderstood. Borrowers often assume that because the payment is lower during the IO period, the lender will size the loan on that lower payment and advance more. On most loans that is not what happens. This article explains how lenders test coverage when there is an IO period, quantifies the difference it makes, and shows what the payment does when the IO period ends, using the example case in the debt sizing template.</p>
+
+<h2>Two payments, two coverage ratios</h2>
+<p>The example loan is $3,934,000 at 6.75 percent fixed, 30-year amortization, 10-year term, with the first 12 months interest-only. There are two different annual payments on this loan:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th></th><th>Monthly payment</th><th>Annual debt service</th><th>DSCR on $382,764 NOI</th></tr></thead>
+<tbody>
+<tr><td>Interest-only (months 1–12)</td><td>$22,129</td><td>$265,545</td><td>1.44x</td></tr>
+<tr class="hl"><td>Amortizing (months 13–120)</td><td>$25,516</td><td>$306,190</td><td>1.25x</td></tr>
+</tbody></table></div>
+
+<p>The interest-only payment is 15.3 percent lower than the amortizing payment, so coverage during the IO year is 1.44x against 1.25x afterwards. Which number did the lender use to size the loan? The amortizing one. The loan is $3,934,000 precisely because $382,764 ÷ (1.25 × 0.07783) equals $3,934,265, and 0.07783 is the amortizing loan constant. The IO payment did not enter the sizing at all.</p>
+
+<h2>Why lenders size on the amortizing payment</h2>
+<p>The reasoning is simple once stated. The lender is committing to a ten-year term. For nine of those years the property has to pay the amortizing payment. If the loan were sized so that the IO payment produced 1.25x coverage, then in month 13 the payment would step up 15 percent and coverage would fall to about 1.08x, well below the lender's minimum, with nine years to go. No underwriter signs up for a loan that fails its own coverage test by design at the end of year one.</p>
+<p>So the convention in agency, bank and most debt-fund lending is: size the loan on the amortizing payment, then grant the IO period as a cash flow feature. The borrower gets the benefit of the lower payment during the IO period, which lifts year-one cash-on-cash, but does not get more proceeds. Some lenders go further and underwrite on a stressed rate above the note rate, or on a shorter amortization than the actual schedule, which reduces the loan again.</p>
+
+<h2>How much the IO convention would be worth</h2>
+<p>It is worth quantifying what a borrower is actually asking for when they ask to be sized on the IO payment. On this deal the IO loan constant is simply the rate, 6.75 percent. Sizing at 1.25x on that constant gives:</p>
+<div class="formula">$382,764 ÷ (1.25 × 0.0675) = $4,536,457</div>
+<p>That is $602,000 more than the amortizing-sized loan, a 15 percent increase in proceeds. It would also exceed the 70 percent LTV cap of $4,480,000, so LTV would bind and the loan would be $4,480,000; still $546,000 more. The amortizing DSCR on that larger loan would be 1.10x. In other words, a lender that sized on the IO payment would be writing a 70 percent LTV loan at 1.10x amortizing coverage and calling it a 1.25x deal. Lenders who do offer IO-based sizing, typically on shorter-term bridge or transitional loans, price and structure for it: higher spread, cash management, reserves, or a requirement to hit a DSCR test on the amortizing payment before the loan can be extended.</p>
+
+<h2>What happens when IO ends</h2>
+<p>The amortization schedule in the template shows the mechanics month by month. For months 1 through 12 the payment is $22,128.75, all interest, and the balance stays at $3,934,000. In month 13 the payment becomes $25,515.85 and principal begins at $3,387.10, rising a little each month as the interest component falls. By month 120, the end of the ten-year term, cumulative principal paid is $501,419 and the balance is $3,432,581, which is 87.3 percent of the original loan.</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Month</th><th>Payment</th><th>Interest</th><th>Principal</th><th>Ending balance</th></tr></thead>
+<tbody>
+<tr><td>12</td><td>$22,129</td><td>$22,129</td><td>$0</td><td>$3,934,000</td></tr>
+<tr class="hl"><td>13</td><td>$25,516</td><td>$22,129</td><td>$3,387</td><td>$3,930,613</td></tr>
+<tr><td>60</td><td>$25,516</td><td>$21,107</td><td>$4,409</td><td>$3,747,951</td></tr>
+<tr><td>120</td><td>$25,516</td><td>$19,343</td><td>$6,173</td><td>$3,432,581</td></tr>
+</tbody></table></div>
+
+<p>Two things follow from that schedule. First, the 12-month IO period costs roughly one year of principal reduction, about $41,000 on this loan, which the borrower has to make up at refinance or sale. Second, the balloon at maturity is 87 percent of the original loan. The property has to be refinanceable at that balance in year 10, at whatever rate and lender box prevails then, and a longer IO period makes that balloon larger.</p>
+
+<h2>What the IO period does for the borrower</h2>
+<p>The benefit shows up in cash flow, not loan size. In the base case, year-one cash flow after debt service is $117,219 on $2,783,340 of equity, a 4.21 percent cash-on-cash return. From year two, cash flow after the amortizing payment is $76,573 and the return is 2.75 percent. The IO year adds $40,645 of distributable cash, which for a value-add business plan is money that funds renovations or carries vacancy during lease-up, and for a stabilized deal is a slightly higher first-year distribution to investors.</p>
+<p>The cost is the lost principal reduction and, on some loans, a higher rate or fee for the IO feature. Whether it is worth it is a cash management question. What it is not is a way to borrow more.</p>
+
+<h2>Questions to ask about an IO period</h2>
+<ul>
+<li><strong>Which payment is DSCR sized on?</strong> If the answer is amortizing, the IO period is a feature. If it is IO, ask what the amortizing coverage is on the proposed loan, and expect the rest of the structure to compensate.</li>
+<li><strong>Is there a DSCR test at the end of the IO period?</strong> Some loans require the property to show amortizing coverage above a threshold before IO can be extended, or trigger cash management if it does not.</li>
+<li><strong>What is the balance at maturity?</strong> Model the balloon and ask whether the property can refinance it at a plausible rate and lender box in that year.</li>
+<li><strong>How long is the IO relative to the term?</strong> A full-term IO loan has a balloon equal to the original loan. That is normal on a short bridge loan and unusual on a ten-year permanent loan.</li>
+</ul>
+
+<h2>A note on modelling it</h2>
+<p>Getting this right in a spreadsheet means carrying both payments: the IO payment for the actual cash flow schedule and the amortizing payment for the sizing test. A model that sizes on whatever payment happens to apply in year one will overstate proceeds on any loan with an IO period, and a model that ignores the IO period will understate year-one cash flow. The template keeps the two separate: the DSCR constraint uses the amortizing loan constant, the amortization schedule honours the IO months, and the year-one cash flow is taken from the schedule rather than from the sizing.</p>
+
+<p class="pointer">The figures above come from the example case in the <strong>DSCR Debt Sizing &amp; Loan Underwriting Model</strong>, an Excel template that sizes the loan on the amortizing payment, reports DSCR on both an amortizing and interest-only basis, builds a 360-month schedule that honours the IO period, and takes year-one cash flow from that schedule. It is available for $79 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>. Set the IO months to zero and the two coverage ratios converge; set them to the full term and the balloon equals the loan.</p>
+</article>
+<section class="more"><strong>More guides</strong><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li></ul></section>
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>

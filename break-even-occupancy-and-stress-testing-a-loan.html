@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Break-Even Occupancy and Stress Testing a Loan</title>
+<meta name="description" content="How to compute break-even occupancy on a leveraged property and stress a loan against rate and NOI shocks, with a worked example showing where DSCR falls below 1.0x.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/break-even-occupancy-and-stress-testing-a-loan">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Break-Even Occupancy and Stress Testing a Loan">
+<meta property="og:description" content="How to compute break-even occupancy on a leveraged property and stress a loan against rate and NOI shocks, with a worked example showing where DSCR falls below 1.0x.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<article class="post">
+<div class="eyebrow">Risk analysis</div>
+<h1>Break-Even Occupancy and Stress Testing a Loan</h1>
+<p class="meta">Worked example from the DSCR Debt Sizing Model example case · 48 units · $3,934,000 loan</p>
+
+<p>Sizing a loan tells you how much a lender will advance on today's numbers. Stress testing tells you how much room there is before today's numbers stop working. Lenders do this as a matter of routine; borrowers should do it before they sign, because the equity is the first thing lost when the cushion runs out. This article covers the two tools that matter most, break-even occupancy and a rate-and-NOI sensitivity grid, using the example case from the debt sizing template.</p>
+
+<h2>The base case</h2>
+<p>The property is a 48-unit apartment building bought for $6,400,000 with stabilized NOI of $382,764. The lender sizes a $3,934,000 loan at 6.75 percent, 30-year amortization, with 12 months of interest-only. Annual debt service on the amortizing payment is $306,190, giving a 1.25x DSCR, which is exactly the lender's minimum. Total operating expenses are $425,652, gross potential rent is $835,200 and other income is $31,680. The cushion above debt service is $76,573 a year once the loan amortizes.</p>
+
+<h2>Break-even occupancy</h2>
+<p>Break-even occupancy is the occupancy rate at which income exactly covers operating expenses plus debt service. Below it, the property cannot pay its mortgage from operations and the owner is funding the shortfall. The template computes it as:</p>
+<div class="formula">Break-even occupancy = (operating expenses + annual debt service − other income) ÷ gross potential rent<br>= ($425,652 + $306,190 − $31,680) ÷ $835,200<br>= 83.8%</div>
+<p>The property is underwritten at 94 percent economic occupancy (a 6 percent vacancy and credit loss allowance). It can lose about ten points of occupancy before it stops covering debt service. Whether ten points is a lot depends on the market and the asset: for stabilized suburban multifamily it is a reasonable cushion; for a property with the lease rollover concentration in a bad submarket, or for an office building, it is thin.</p>
+<p>Two refinements are worth knowing. The template's figure holds the management fee at the base-case dollar amount, which slightly overstates break-even since the fee would fall with income; the difference here is under half a point. And break-even on the interest-only payment is lower (about 79 percent on this deal, since debt service drops to $265,545) but it is the amortizing number that matters, because that is the payment the property has to carry for the other nine years of the term.</p>
+
+<h2>Why a single DSCR is not enough</h2>
+<p>A 1.25x DSCR means NOI can fall 20 percent before coverage reaches 1.0x. That is the cushion from the lender's seat. From the borrower's seat the relevant questions are different: what happens to the loan amount if rates move before closing, what happens to coverage if the pro forma NOI is not achieved, and how much of each can the deal absorb at once. The answer requires a grid, not a ratio.</p>
+
+<h2>Stress grid one: maximum loan</h2>
+<p>The first grid in the template re-sizes the loan at seven rates and seven NOI levels. Reading the four corners and the center:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Rate \ NOI</th><th>−15%</th><th>−10%</th><th>0%</th><th>+10%</th><th>+15%</th></tr></thead>
+<tbody>
+<tr><td>6.00%</td><td>$3,617,000</td><td>$3,830,000</td><td>$4,256,000</td><td>$4,480,000</td><td>$4,480,000</td></tr>
+<tr class="hl"><td>6.75%</td><td>$3,344,000</td><td>$3,540,000</td><td>$3,934,000</td><td>$4,327,000</td><td>$4,480,000</td></tr>
+<tr><td>7.50%</td><td>$3,102,000</td><td>$3,284,000</td><td>$3,649,000</td><td>$4,014,000</td><td>$4,196,000</td></tr>
+</tbody></table></div>
+
+<p>This grid answers the pre-closing question. If the rate lock slips 50 basis points, the loan drops to $3,740,000, a $194,000 equity gap. If the lender's underwriter cuts NOI by 10 percent against the pro forma, which is common when a vacancy floor and market management fee are applied, the loan drops to $3,540,000. Both at once, 7.25 percent and −10 percent, gives $3,366,000: $568,000 less than the base case, and the borrower is bringing 14 percent more equity than planned.</p>
+
+<h2>Stress grid two: DSCR at the base loan</h2>
+<p>The second grid holds the loan at $3,934,000 and recomputes coverage. This is the post-closing question: once the debt is in place, how far can things go wrong before the property fails its covenant or cannot pay.</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Rate \ NOI</th><th>−15%</th><th>−10%</th><th>−5%</th><th>0%</th><th>+5%</th></tr></thead>
+<tbody>
+<tr><td>6.00%</td><td>1.15x</td><td>1.22x</td><td>1.28x</td><td>1.35x</td><td>1.42x</td></tr>
+<tr class="hl"><td>6.75%</td><td>1.06x</td><td>1.13x</td><td>1.19x</td><td>1.25x</td><td>1.31x</td></tr>
+<tr><td>7.25%</td><td>1.01x</td><td>1.07x</td><td>1.13x</td><td>1.19x</td><td>1.25x</td></tr>
+<tr><td>7.50%</td><td>0.99x</td><td>1.04x</td><td>1.10x</td><td>1.16x</td><td>1.22x</td></tr>
+</tbody></table></div>
+
+<p>For a fixed-rate loan the rate rows matter at refinance, not during the term. The NOI columns matter every month. A 10 percent NOI shortfall takes coverage to 1.13x, below the 1.25x the lender required at closing and likely below any cash-sweep or covenant threshold in the loan documents. A 15 percent shortfall combined with a refinance at 7.5 percent takes coverage below 1.0x, and the property no longer pays its own debt service.</p>
+<p>For a floating-rate loan the rate rows matter immediately, which is why lenders size floating-rate debt on a stressed rate rather than the current index and why rate caps are not optional.</p>
+
+<h2>Cash-on-cash under stress</h2>
+<p>Equity returns are more sensitive than coverage, because debt service is a fixed charge. In the base case, year-one cash flow after the interest-only debt service of $265,545 is $117,219, a 4.21 percent cash-on-cash return on $2,783,340 of equity. Once the loan amortizes, cash flow after debt service falls to $76,573 and cash-on-cash to 2.75 percent. A 10 percent NOI shortfall, $38,276, takes the amortizing cash flow to about $38,000 and the return to about 1.4 percent. A 20 percent shortfall takes it to zero. Leverage that produces a 1.25x DSCR produces an equity return that is almost entirely dependent on hitting the pro forma.</p>
+
+<h2>A stress-testing routine</h2>
+<ol>
+<li><strong>Compute break-even occupancy on the amortizing payment</strong> and compare it with the worst trailing twelve-month occupancy the property or submarket has recorded. If the worst year was below break-even, the deal needs less leverage or more reserves.</li>
+<li><strong>Size the loan at the rate lock plus 50 basis points</strong> and carry the lower number in the equity raise. Treat any difference at closing as a pleasant surprise.</li>
+<li><strong>Size the loan at underwritten NOI, not pro forma.</strong> Apply a 5 percent vacancy floor, a market management fee and $250 to $300 per unit of reserves yourself before the lender does.</li>
+<li><strong>Find the cell where DSCR crosses 1.0x</strong> and ask whether that combination is plausible over the loan term. On this deal it is −15 percent NOI at 7.5 percent, which is a refinance-risk scenario rather than an operating one, but it exists.</li>
+<li><strong>Hold a reserve sized to the gap.</strong> If a 10 percent NOI shortfall costs $38,000 a year of cash flow, a $100,000 operating reserve buys roughly two and a half years of cover.</li>
+</ol>
+
+<p class="pointer">The figures above are from the example case in the <strong>DSCR Debt Sizing &amp; Loan Underwriting Model</strong>, an Excel template that computes break-even occupancy, year-one and stabilized cash-on-cash from the actual amortization schedule, and both 7×7 stress grids from live formulas with user-set step sizes. A one-page dashboard reports the maximum loan at +50 basis points and at −10 percent NOI directly. It is available for $79 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>.</p>
+</article>
+<section class="more"><strong>More guides</strong><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></section>
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>

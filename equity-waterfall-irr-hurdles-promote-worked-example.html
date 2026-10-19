@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equity Waterfall with IRR Hurdles and Promote: A Worked Example</title>
+<meta name="description" content="Step-by-step walk through a three-hurdle LP/GP distribution waterfall on a $3M equity deal: capital accounts, when each tier pays, and what the promote costs the LP in IRR.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/equity-waterfall-irr-hurdles-promote-worked-example">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Equity Waterfall with IRR Hurdles and Promote: A Worked Example">
+<meta property="og:description" content="Step-by-step walk through a three-hurdle LP/GP distribution waterfall on a $3M equity deal: capital accounts, when each tier pays, and what the promote costs the LP in IRR.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<article class="post">
+<div class="eyebrow">Equity structures</div>
+<h1>Equity Waterfall with IRR Hurdles and Promote: A Worked Example</h1>
+<p class="meta">Worked example from the Equity Waterfall Model example case · $3,000,000 equity · 10-year hold</p>
+
+<p>Most descriptions of a distribution waterfall stop at the term sheet: "8 percent preferred return, then 80/20 to a 12, then 70/30 to a 15, then 60/40." That tells you the splits, not when each one starts, how much cash flows through each tier, or what the promote costs the investor. This article walks through the mechanics tier by tier on the example case in the waterfall template.</p>
+
+<h2>The deal</h2>
+<p>A joint venture buys a 120-unit value-add property with $3,000,000 of equity. The limited partner contributes 90 percent ($2,700,000) and the general partner co-invests 10 percent ($300,000). Distributable cash flow to equity, after debt service and before any promote, is:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Year</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+<tbody>
+<tr><td>Cash flow ($000)</td><td>−3,000</td><td>165</td><td>182</td><td>201</td><td>224</td><td>241</td><td>255</td><td>268</td><td>279</td><td>290</td><td>6,400</td></tr>
+</tbody></table></div>
+
+<p>Year 10 includes $6,110,000 of net sale proceeds. Total distributions over the hold are $8,505,000 on $3,000,000 invested, a 2.835x multiple and a 13.09 percent project-level IRR before any promote.</p>
+<p>The waterfall has four tiers. Tier 1 returns capital plus an 8 percent preferred return, split pro rata to capital (90/10). Tier 2 pays 80/20 until equity has earned a 12 percent IRR. Tier 3 pays 70/30 to a 15 percent IRR. Tier 4 splits anything above that 60/40.</p>
+
+<h2>How an IRR hurdle is tracked</h2>
+<p>The method used in most joint venture agreements, and in the template, is a hypothetical capital account per tier. For each tier, the account starts at the equity contributed, accrues at the hurdle rate each year, and is reduced by every distribution made to date, whether from this tier or an earlier one. Cash in a tier is paid out until that tier's account reaches zero. When it does, equity has earned exactly the hurdle IRR, and the remaining cash moves to the next tier.</p>
+<div class="formula">Balance before distribution = beginning balance × (1 + hurdle) + contributions − distributions already made this year in earlier tiers<br>Tier distribution = MIN(balance before distribution, cash remaining)<br>Ending balance = balance before distribution − tier distribution</div>
+<p>This is a whole-fund, or European, structure: hurdles are measured on the full equity investment over its life.</p>
+
+<h2>Tier 1: return of capital and the 8 percent preferred return</h2>
+<p>The Tier 1 account begins at $3,000,000. In year 1 it accrues $240,000 at 8 percent, bringing the balance to $3,240,000; the year's $165,000 of cash is paid entirely in Tier 1 and the account ends at $3,075,000. The pattern repeats. Cash flow in years 1 to 9 never exceeds the 8 percent accrual, so the account grows every year even as distributions are made:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Year</th><th>Beginning</th><th>Accrual @ 8%</th><th>Distribution</th><th>Ending</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>$3,000,000</td><td>$240,000</td><td>$165,000</td><td>$3,075,000</td></tr>
+<tr><td>2</td><td>$3,075,000</td><td>$246,000</td><td>$182,000</td><td>$3,139,000</td></tr>
+<tr><td>5</td><td>$3,220,250</td><td>$257,620</td><td>$241,000</td><td>$3,236,870</td></tr>
+<tr><td>9</td><td>$3,211,651</td><td>$256,932</td><td>$290,000</td><td>$3,178,584</td></tr>
+<tr class="hl"><td>10</td><td>$3,178,584</td><td>$254,287</td><td>$3,432,870</td><td>$0</td></tr>
+</tbody></table></div>
+
+<p>In year 10 the balance before distribution is $3,432,870 and cash available is $6,400,000. Tier 1 takes $3,432,870 and the account closes at zero. The investors have now received their capital back plus an 8 percent compounded return. Over the whole hold, Tier 1 distributes $5,537,870, split $4,984,083 to the LP and $553,787 to the GP. Cash remaining after Tier 1 in year 10 is $2,967,130.</p>
+
+<h2>Tier 2: 80/20 to a 12 percent IRR</h2>
+<p>The Tier 2 account runs in parallel from year 0 at 12 percent, reduced each year by the Tier 1 distributions. By the start of year 10 it stands at $5,040,721; it accrues $604,887 and is reduced by the $3,432,870 paid in Tier 1 that year, leaving a balance of $2,212,738. Cash remaining is $2,967,130, so Tier 2 is paid in full: $2,212,738, of which $1,770,190 goes to the LP and $442,548 to the GP. Equity has now earned a 12 percent IRR, and $754,392 remains.</p>
+
+<h2>Tier 3: 70/30 to a 15 percent IRR</h2>
+<p>The Tier 3 account at 15 percent, after the same deductions, has a balance before distribution of $2,260,278 in year 10. Only $754,392 remains, so Tier 3 takes all of it and the account ends at $1,505,886, still positive. Equity did not reach a 15 percent IRR, so Tier 4 receives nothing. The Tier 3 cash splits $528,074 to the LP and $226,318 to the GP.</p>
+
+<h2>What each party ends up with</h2>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th></th><th>Project</th><th>LP</th><th>GP</th></tr></thead>
+<tbody>
+<tr><td>Capital invested</td><td>$3,000,000</td><td>$2,700,000</td><td>$300,000</td></tr>
+<tr><td>Total distributions</td><td>$8,505,000</td><td>$7,282,348</td><td>$1,222,652</td></tr>
+<tr><td>Profit</td><td>$5,505,000</td><td>$4,582,348</td><td>$922,652</td></tr>
+<tr><td>Equity multiple</td><td>2.835x</td><td>2.697x</td><td>4.076x</td></tr>
+<tr><td>IRR</td><td>13.09%</td><td>12.51%</td><td>17.34%</td></tr>
+<tr><td>Share of profit</td><td>100%</td><td>83.2%</td><td>16.8%</td></tr>
+<tr><td>Share of capital</td><td>100%</td><td>90%</td><td>10%</td></tr>
+</tbody></table></div>
+
+<p>The GP put in 10 percent of the capital and received 16.8 percent of the profit. The difference is the promote.</p>
+
+<h2>What the promote is worth</h2>
+<p>With no promote, the GP's 10 percent co-invest would have earned a pro rata 10 percent of all distributions: $850,500. It actually received $1,222,652. The promote is the difference, $372,152, or 6.76 percent of total project profit. Expressed the way an LP will think about it: the project IRR of 13.09 percent is what the LP would have earned with no promote; the LP actually earns 12.51 percent, a give-up of 58 basis points. That is the price of the sponsor's work and alignment, and it is worth knowing before signing an operating agreement.</p>
+<p>Note where the promote came from. The deal cleared the 8 and 12 percent hurdles but not the 15, so the GP's promote was earned in Tiers 2 and 3 only, and the 60/40 residual tier never came into play. A sponsor's deck that projects returns in Tier 4 is projecting an outcome above a 15 percent whole-fund IRR; it is worth asking what exit value that assumes.</p>
+
+<h2>Sensitivity to exit</h2>
+<p>Because almost all of the cash arrives in year 10, the result is sensitive to the sale price. Scaling the final-year cash flow by 10 percent either way moves the project IRR from 13.09 percent to 12.17 percent or 13.94 percent, and the multiple from 2.835x to 2.622x or 3.048x. At a 70 percent exit, the project IRR is 10.07 percent and the deal clears Tier 1 but barely reaches into Tier 2; at 130 percent it is 15.47 percent and Tier 4 begins to pay. The promote is highly convex in the exit, which is the structural reason sponsors and investors argue about exit cap rates.</p>
+
+<h2>Reading a waterfall in an operating agreement</h2>
+<ul>
+<li><strong>Confirm the lookback basis.</strong> Whole-fund IRR hurdles, as here, are the norm in JVs. Deal-by-deal or annual preferred returns without a lookback behave differently.</li>
+<li><strong>Check whether the preferred return compounds.</strong> The example compounds annually. A simple (non-compounding) pref produces a lower Tier 1 balance and moves cash into the promoted tiers sooner.</li>
+<li><strong>Look for a catch-up.</strong> Some agreements let the GP take 100 percent of cash after the pref until it has received a fixed share of total profit. The example has none; a catch-up shifts more cash to the GP at the same project return.</li>
+<li><strong>Tie the splits to the capital accounts, not the headline.</strong> "80/20 above an 8" means nothing until you know how the 8 is measured and when it is deemed reached.</li>
+</ul>
+
+<p class="pointer">Every figure in this article comes from the example case in the <strong>Equity Waterfall Model</strong>, an Excel template that shows the hypothetical capital account for each of up to four IRR hurdle tiers, year by year, allocates cash to LP and GP per tier, reports IRR, multiple, profit and promote by party, and runs the exit sensitivity. It is available for $89 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>. Enter your equity, hurdles, splits and cash flow row, and the four built-in reconciliation checks confirm the arithmetic ties.</p>
+</article>
+<section class="more"><strong>More guides</strong><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></section>
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>

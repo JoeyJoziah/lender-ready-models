@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lender Ready Models: Excel Real Estate Underwriting Templates</title>
+<meta name="description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), equity waterfalls with IRR hurdles, and multifamily rent roll analysis. Live formulas, no macros. Sold on eFinancialModels.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lender Ready Models: Excel Real Estate Underwriting Templates">
+<meta property="og:description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), equity waterfalls with IRR hurdles, and multifamily rent roll analysis. Live formulas, no macros. Sold on eFinancialModels.">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lender Ready Models: ledger-paper token system (shared across every page). */
+:root{
+  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
+  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
+  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
+a{color:var(--accent)}
+nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
+nav.top a{text-decoration:none}
+header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
+.lede{max-width:62ch;font-size:17px;margin:0}
+.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
+.products{display:grid;gap:22px}
+.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
+.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
+.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
+.for{color:var(--muted);font-size:14px}
+.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
+.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
+.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
+.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.bundle{background:var(--tint)}
+.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
+.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
+.faq h3{font-size:15px;margin:0 0 4px}
+.faq p{margin:0;max-width:68ch;color:var(--muted)}
+.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
+.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.guides li{max-width:70ch}
+.guides small{display:block;color:var(--muted);font-size:13px}
+/* Article pages */
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h2{font-size:21px;margin-top:14px}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:16.5px;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
+table.num tr.hl td{font-weight:600}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
+.pointer{border-top:1px solid var(--rule);padding-top:18px}
+.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
+@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Site">
+  <a class="brand" href="/">Lender Ready Models</a>
+  <a href="/#guides">Guides</a>
+  <a href="/#products">Templates</a>
+  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Excel underwriting templates · real estate debt and equity</div>
+  <h1>Lender Ready Models</h1>
+  <p class="lede">Three workbooks that do the arithmetic a lender, an LP or an investment committee will do to your deal before they say yes. Every cell is a live formula. No macros, no add-ins, no hidden sheets.</p>
+  <p class="disc">Built and tested by an AI system; each file is recalculated and reviewed before release and updated when buyers report an edge case. Modelling tools only, not financial, investment, lending or legal advice.</p>
+</header>
+
+<section class="products" id="products" aria-label="Products">
+  <article class="card">
+    <div class="main">
+      <h2>DSCR Debt Sizing &amp; Loan Underwriting Model</h2>
+      <div class="for">For buyers of stabilized multifamily, storage, retail and industrial; mortgage brokers packaging a request.</div>
+      <dl class="spec">
+        <dt>Sizes on</dt><dd>LTV · DSCR (amortizing) · debt yield · binding constraint flagged</dd>
+        <dt>Schedule</dt><dd>360 months, interest-only period honoured</dd>
+        <dt>Stress</dt><dd>7×7 grids: max loan and DSCR vs rate and NOI</dd>
+        <dt>Example</dt><dd>48 units, $6.4M price, 1.25x min DSCR → $3.934M loan, DSCR binds</dd>
+      </dl>
+    </div>
+    <div class="buy"><div class="price">$79<small>single-user licence</small></div><a class="btn" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Buy on eFinancialModels</a><span class="ok">.xlsx · Excel 2016+ · LibreOffice</span></div>
+  </article>
+
+  <article class="card">
+    <div class="main">
+      <h2>Equity Waterfall Model</h2>
+      <div class="for">For sponsors building an offering, LPs checking a deck, analysts explaining a promote to a committee.</div>
+      <dl class="spec">
+        <dt>Structure</dt><dd>Up to 4 tiers · IRR hurdles · LP/GP split per tier · residual</dd>
+        <dt>Method</dt><dd>European whole-fund IRR lookback, capital account shown per tier</dd>
+        <dt>Outputs</dt><dd>IRR, MOIC, profit by party · promote $ · LP IRR give-up</dd>
+        <dt>Checks</dt><dd>4 reconciliations that must read zero or OK</dd>
+      </dl>
+    </div>
+    <div class="buy"><div class="price">$89<small>single-user licence</small></div><a class="btn" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Buy on eFinancialModels</a><span class="ok">.xlsx · annual periods · 10 years</span></div>
+  </article>
+
+  <article class="card">
+    <div class="main">
+      <h2>Multifamily Rent Roll Analyzer</h2>
+      <div class="for">For anyone buying, refinancing or asset-managing 10 to 150 units.</div>
+      <dl class="spec">
+        <dt>Capacity</dt><dd>150 units · 5 unit types · Occupied / Vacant / Notice / Model / Down</dd>
+        <dt>Computes</dt><dd>Loss-to-lease · physical and economic occupancy · rent per SF</dd>
+        <dt>Rollover</dt><dd>Expirations by bucket, six-month concentration</dd>
+        <dt>Value</dt><dd>In-place vs mark-to-market NOI and value at your cap rate</dd>
+      </dl>
+    </div>
+    <div class="buy"><div class="price">$69<small>single-user licence</small></div><a class="btn" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Buy on eFinancialModels</a><span class="ok">.xlsx · paste your roll in</span></div>
+  </article>
+
+  <article class="card bundle">
+    <div class="main">
+      <h2>Coming next: Real Estate Fund Model</h2>
+      <div class="for">A closed-end fund model with capital calls, management fees, fund-level waterfall and LP/GP returns is in testing.</div>
+      <dl class="spec">
+        <dt>Price</dt><dd>$169 single-user licence, when released</dd>
+        <dt>Where</dt><dd>Same vendor store on eFinancialModels</dd>
+      </dl>
+    </div>
+    <div class="buy"><div class="price">$169<small>coming soon</small></div><a class="btn" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Watch the store</a></div>
+  </article>
+</section>
+
+<section class="guides" id="guides" aria-label="Guides">
+  <h2>Guides</h2>
+  <p class="disc">Plain explanations of the arithmetic behind each template, with worked examples drawn from the templates' own example cases.</p>
+  <ul>
+  <li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a><small>The crossover rate at which a 1.25x DSCR floor overtakes a 70% LTV cap, and what each 25 bps costs in proceeds.</small></li>
+<li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a><small>What each of the three sizing tests protects against, and how they hand off to each other as rates and prices move.</small></li>
+<li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a><small>Computing loss-to-lease from a unit-level roll, and why economic occupancy and expiration concentration decide whether it is real.</small></li>
+<li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a><small>A three-hurdle LP/GP waterfall traced tier by tier through the capital accounts, with the promote and the LP&#x27;s IRR give-up.</small></li>
+<li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a><small>Break-even occupancy on the amortizing payment, two stress grids, and the cell where DSCR falls below 1.0x.</small></li>
+<li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a><small>Why DSCR is sized on the amortizing payment during an IO period, the leverage the IO convention would add, and the balloon it leaves.</small></li>
+  </ul>
+</section>
+
+<section class="faq" id="faq" aria-label="Questions">
+  <div><h3>Where do I buy?</h3><p>All templates are sold through the Lender Ready Models vendor store on eFinancialModels.com, which handles payment, delivery and licensing.</p></div>
+  <div><h3>Who built these?</h3><p>An AI system did the modelling, under a standing instruction set from a finance professional, and recalculates every file with an independent engine before release. Questions sent to the support inbox are answered by the same system; anything it cannot resolve is escalated to a person.</p></div>
+  <div><h3>Can I edit the formulas?</h3><p>Yes. Nothing is locked or hidden. Inputs are blue text; formulas are black; cross-sheet links are green.</p></div>
+  <div><h3>Refunds?</h3><p>Refunds are governed by the marketplace's policy. If a workbook does not do what its listing says, contact the store through eFinancialModels and it will be made right.</p></div>
+</section>
+
+<footer>
+  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
+  <div>Lender Ready Models · Templates sold through <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
+</footer>
+</div>
+</body>
+</html>
