@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss-to-Lease Explained: Reading a Multifamily Rent Roll</title>
+<meta name="description" content="What loss-to-lease means, how to compute it from a unit-level rent roll, and why economic occupancy and lease expirations matter as much as the headline number. Worked example.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/loss-to-lease-explained-multifamily-rent-roll">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111416" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Loss-to-Lease Explained: Reading a Multifamily Rent Roll">
+<meta property="og:description" content="What loss-to-lease means, how to compute it from a unit-level rent roll, and why economic occupancy and lease expirations matter as much as the headline number. Worked example.">
+<meta property="og:url" content="https://lender-ready-models.onrender.com/loss-to-lease-explained-multifamily-rent-roll">
+<meta property="og:image" content="https://lender-ready-models.onrender.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d477a'/%3E%3Cpath d='M8 9v14h16' stroke='%23fff' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#f5f4ef; --sheet:#ffffff; --ink:#15191e; --ink-2:#4a525c; --ink-3:#6b7380;
+  --rule:#d8d5cc; --rule-2:#e7e4dc; --accent:#0d477a; --accent-ink:#ffffff; --wash:#e6edf4; --pos:#1d6a37;
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif; --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:16px; --max:1200px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111416; --sheet:#181c20; --ink:#e8e6e0; --ink-2:#a9b1bb; --ink-3:#8b939d;
+  --rule:#2c3238; --rule-2:#22272c; --accent:#8db9e6; --accent-ink:#0a1420; --wash:#172331; --pos:#86c99c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111416; --sheet:#181c20; --ink:#e8e6e0; --ink-2:#a9b1bb; --ink-3:#8b939d;
+  --rule:#2c3238; --rule-2:#22272c; --accent:#8db9e6; --accent-ink:#0a1420; --wash:#172331; --pos:#86c99c; color-scheme:dark}
+@media (min-width:760px){:root{--gut:32px}}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button{font:inherit;color:inherit}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.container{max-width:var(--max);margin:0 auto;padding-inline:max(var(--gut),env(safe-area-inset-left,0px)) max(var(--gut),env(safe-area-inset-right,0px))}
+.skip{position:absolute;left:8px;top:-60px;background:var(--ink);color:var(--paper);padding:8px 12px;z-index:50;text-decoration:none}
+.skip:focus{top:8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+
+/* Header */
+.site-head{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--rule)}
+.site-head .container{display:flex;align-items:center;gap:16px;min-height:56px}
+.brand{display:flex;align-items:baseline;gap:10px;color:var(--ink);text-decoration:none;margin-right:auto;white-space:nowrap}
+.brand b{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.005em}
+.brand span{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;display:none}
+@media (min-width:1040px){.brand span{display:inline}}
+.site-nav ul{display:flex;gap:4px 20px;list-style:none;margin:0;padding:0}
+.site-nav a{color:var(--ink-2);text-decoration:none;font-size:14px;padding:6px 0}
+.site-nav a:hover{color:var(--ink)}
+.site-nav .hide-s{display:none}
+@media (min-width:760px){.site-nav .hide-s{display:list-item}}
+.head-cta{font-size:14px;font-weight:600;text-decoration:none;color:var(--accent-ink);background:var(--accent);padding:8px 12px;white-space:nowrap;display:none}
+@media (min-width:560px){.head-cta{display:inline-block}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;font-size:15px;padding:12px 18px;border:1px solid var(--accent);min-height:44px}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+.btn .arr{font-family:var(--mono);font-weight:400}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper);filter:none}
+
+/* Hero */
+.hero{padding-block:40px 32px;border-bottom:1px solid var(--rule)}
+.hero-grid{display:grid;gap:32px;align-items:start}
+@media (min-width:1040px){.hero{padding-block:64px 48px}.hero-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(32px,5.4vw,52px);line-height:1.06;letter-spacing:-.015em;margin:14px 0 18px;text-wrap:balance}
+.hero .lede{font-size:18px;line-height:1.5;color:var(--ink-2);max-width:46ch;margin:0 0 26px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.hero .disc{font-size:13px;color:var(--ink-2);max-width:56ch;margin:0;padding-left:12px;border-left:2px solid var(--rule)}
+.sheetframe{background:var(--sheet);border:1px solid var(--rule);margin:0}
+.sheetframe .bar{display:flex;align-items:stretch;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--ink-2);min-height:34px}
+.sheetframe .bar .file{padding:8px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheetframe .bar .tab{padding:8px 12px;border-left:1px solid var(--rule);color:var(--ink);background:var(--paper);white-space:nowrap}
+.sheetframe button.zoom{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in}
+.sheetframe figcaption{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--ink-2);padding:9px 12px;border-top:1px solid var(--rule)}
+.sheetframe figcaption .num{white-space:nowrap}
+
+/* Trust row */
+.trust{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.trust li{padding:14px 14px 14px 0;border-bottom:1px solid var(--rule-2);display:grid;gap:2px;min-width:0}
+.trust li:nth-child(2n){padding-left:14px;border-left:1px solid var(--rule-2)}
+.trust b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:20px;line-height:1.2}
+.trust span{font-size:13px;color:var(--ink-2);line-height:1.35}
+.trust li:last-child{grid-column:1/-1;border-left:0;padding-left:0}
+@media (min-width:1040px){.trust{grid-template-columns:repeat(5,minmax(0,1fr))}.trust li,.trust li:nth-child(2n){padding:16px 16px;border-left:1px solid var(--rule-2);border-bottom:0}.trust li:first-child{border-left:0;padding-left:0}.trust li:last-child{grid-column:auto;border-left:1px solid var(--rule-2);padding-left:16px}}
+
+/* Section heads */
+section.block{padding-block:56px 8px}
+.sec-head{display:grid;gap:8px;margin-bottom:28px;max-width:72ch}
+.sec-head .eyebrow{display:flex;gap:10px;align-items:center}
+.sec-head .eyebrow::after{content:"";height:1px;background:var(--rule);flex:1;min-width:40px}
+.sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,3.6vw,36px);line-height:1.12;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sec-head p{margin:0;color:var(--ink-2);font-size:16.5px}
+
+/* Contents strip */
+.toc ol{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--ink)}
+@media (min-width:760px){.toc ol{grid-template-columns:1fr 1fr;column-gap:40px}}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc a{display:flex;align-items:baseline;gap:10px;padding:11px 0;color:var(--ink);text-decoration:none;min-height:44px}
+.toc a:hover .nm{text-decoration:underline;text-underline-offset:.18em}
+.toc .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);width:2ch}
+.toc .nm{font-weight:500}
+.toc .lead{flex:1;border-bottom:1px dotted var(--ink-3);transform:translateY(-4px);min-width:16px}
+.toc .cat{font-size:12.5px;color:var(--ink-3);display:none}
+@media (min-width:1040px){.toc .cat{display:inline}}
+.toc .pr{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Product */
+.product{padding-block:44px;border-top:1px solid var(--rule)}
+.product:first-of-type{border-top:0}
+.p-head{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:baseline;margin-bottom:22px}
+.p-head .pn{font-family:var(--mono);font-size:13px;color:var(--ink-3);grid-row:span 2;padding-top:6px}
+.p-head h3{font-family:var(--display);font-weight:600;font-size:clamp(22px,2.8vw,30px);line-height:1.15;margin:0;letter-spacing:-.008em;text-wrap:balance}
+.p-head .cat{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);grid-column:2;order:-1}
+.p-grid{display:grid;gap:28px}
+@media (min-width:1040px){.p-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px}}
+.gallery{min-width:0}
+.stage{background:var(--sheet);border:1px solid var(--rule)}
+.stage-btn{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in;aspect-ratio:16/10;overflow:hidden;position:relative}
+.stage-btn img{width:100%;height:100%;object-fit:contain;object-position:center top}
+.stage-cap{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 12px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
+.stage-cap b{color:var(--ink);font-weight:500}
+.stage-cap .hint{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 6px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.tab{flex:0 0 auto;width:112px;display:grid;gap:6px;padding:0;border:0;background:none;text-align:left;cursor:pointer;scroll-snap-align:start}
+.tab img{width:112px;height:70px;object-fit:cover;object-position:left top;border:1px solid var(--rule);background:#fff;opacity:.72}
+.tab span{font-size:12.5px;color:var(--ink-2);line-height:1.25;padding-bottom:4px;border-bottom:2px solid transparent}
+.tab:hover img{opacity:1}
+.tab[aria-selected="true"] img{opacity:1;outline:2px solid var(--accent);outline-offset:-1px}
+.tab[aria-selected="true"] span{color:var(--ink);border-bottom-color:var(--accent);font-weight:500}
+@media (min-width:760px){.tab{width:128px}.tab img{width:128px;height:80px}}
+.p-info{display:grid;gap:22px;align-content:start;min-width:0}
+.p-info .lede{margin:0;font-size:16.5px}
+.p-info .for{margin:0;font-size:14px;color:var(--ink-2)}
+.p-info .for b{font-weight:500;color:var(--ink)}
+dl.spec{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);border-top:1px solid var(--rule);font-size:14px}
+dl.spec dt,dl.spec dd{padding:8px 0;border-bottom:1px solid var(--rule-2);margin:0}
+dl.spec dt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);padding-right:16px;padding-top:10px}
+.excase{background:var(--sheet);border:1px solid var(--rule)}
+.excase .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:10px 14px 0}
+.excase .assume{font-size:13px;color:var(--ink-2);padding:2px 14px 10px;border-bottom:1px solid var(--rule);margin:0}
+dl.ledger{margin:0;padding:4px 14px 8px}
+dl.ledger div{display:flex;align-items:baseline;gap:8px;padding:6px 0;font-size:14px}
+dl.ledger dt{color:var(--ink-2);flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:8px}
+dl.ledger dt::after{content:"";flex:1 1 12px;border-bottom:1px dotted var(--ink-3);opacity:.6;transform:translateY(-4px);min-width:12px}
+dl.ledger dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+dl.ledger .hl dt{color:var(--ink);font-weight:500}
+dl.ledger .hl dd{font-weight:500;color:var(--accent);background:var(--wash);padding:1px 6px;margin-right:-6px}
+.buy{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:center;border-top:2px solid var(--ink);padding-top:16px}
+.price{font-family:var(--display);font-weight:600;font-size:40px;line-height:1;font-variant-numeric:tabular-nums lining-nums}
+.price .cur{font-size:.55em;vertical-align:.62em;margin-right:2px;color:var(--ink-2)}
+.buy-meta{font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.buy .actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:10px}
+.buy .alt{font-size:14px}
+.related{font-size:13.5px;color:var(--ink-2);margin:0}
+
+/* Calculators */
+.calc{background:var(--sheet);border:1px solid var(--rule);margin-bottom:28px}
+.calc-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.calc-head h3{font-family:var(--display);font-weight:600;font-size:21px;margin:0}
+.calc-head .note{font-size:12.5px;color:var(--ink-2);font-family:var(--mono)}
+.calc-body{display:grid;gap:0}
+@media (min-width:1040px){.calc-body{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}.calc-body.wide-in{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.calc-in{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;align-content:start;border-bottom:1px solid var(--rule)}
+@media (min-width:1040px){.calc-in{border-bottom:0;border-right:1px solid var(--rule)}}
+.field{display:grid;gap:5px;min-width:0}
+.field label{font-size:13px;color:var(--ink-2);line-height:1.25}
+.field .inp{display:flex;align-items:stretch;border:1px solid var(--ink-3);background:var(--paper)}
+.field .inp:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.field .u{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding:0 8px;display:flex;align-items:center;background:var(--rule-2)}
+.field input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--ink);font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px;padding:9px 10px;outline:none;-moz-appearance:textfield;appearance:textfield}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.field input[aria-invalid="true"]{color:#b3261e}
+.reset{grid-column:1/-1;justify-self:start;background:none;border:0;padding:6px 0;color:var(--accent);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;font-size:14px}
+.calc-out{padding:18px;display:grid;gap:18px;align-content:start;min-width:0}
+.headline{display:grid;gap:4px;border-bottom:1px solid var(--rule);padding-bottom:14px}
+.headline .k{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.headline .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(30px,5vw,40px);font-weight:500;line-height:1.1}
+.headline .s{font-size:14px;color:var(--ink-2)}
+.headline .s b{color:var(--ink);font-weight:600}
+.bars{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.bars li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:14px}
+.bars .lab{color:var(--ink-2)}
+.bars .val{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.bars .track{grid-column:1/-1;height:10px;background:var(--rule-2);position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--ink-3);opacity:.55}
+.bars li.bind .lab{color:var(--ink);font-weight:500}
+.bars li.bind .fill{background:var(--accent);opacity:1}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;padding:0 5px;margin-left:8px;color:var(--accent);white-space:nowrap}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--rule);margin:0}
+@media (min-width:760px){.kv{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kv div{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);min-width:0}
+.kv dt{font-size:12px;color:var(--ink-2);line-height:1.3}
+.kv dd{margin:2px 0 0;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
+.calc-foot{padding:12px 18px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+@media (prefers-reduced-motion:no-preference){.bars .fill{transition:width .25s ease}}
+/* LTL grid */
+.ltl-in{padding:18px;display:grid;gap:14px;border-bottom:1px solid var(--rule);min-width:0}
+@media (min-width:1040px){.ltl-in{border-bottom:0;border-right:1px solid var(--rule)}}
+.ltl-cols{display:none}
+.ltl-row{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;min-width:0;align-items:end}
+.ltl-row .legend{font-weight:600;font-size:14px;grid-column:1/-1}
+.ltl-row+.ltl-row{border-top:1px solid var(--rule-2);padding-top:12px}
+@media (min-width:600px){
+  .ltl-cols{display:grid;grid-template-columns:76px repeat(4,minmax(0,1fr));gap:10px;font-size:12px;color:var(--ink-2);line-height:1.25}
+  .ltl-row{grid-template-columns:76px repeat(4,minmax(0,1fr));align-items:center}
+  .ltl-row .legend{grid-column:auto;font-size:13.5px}
+  .ltl-row .field label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .ltl-row+.ltl-row{padding-top:10px}
+}
+.ltl-in .settings{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;border-top:1px solid var(--rule);padding-top:14px}
+.warn{color:#b3261e;font-size:13px;margin:0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .warn,:root:not([data-theme="light"]) .field input[aria-invalid="true"]{color:#ff8a80}}
+
+/* Compare */
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--sheet);border:1px solid var(--rule)}
+.cmp th,.cmp td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--rule-2)}
+.cmp thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;border-bottom:1px solid var(--ink);background:var(--paper)}
+.cmp tbody th{font-weight:600}
+.cmp tbody th a{color:var(--ink);text-decoration:none}
+.cmp tbody th a:hover{text-decoration:underline}
+.cmp .pr{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.cmp .hz{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+@media (max-width:899px){
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block}
+  .cmp thead{display:none}
+  .cmp tr{padding:12px 14px;border-bottom:1px solid var(--rule)}
+  .cmp th,.cmp td{padding:2px 0;border:0}
+  .cmp td::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+  .cmp .pr{text-align:left}
+}
+
+/* Guides list */
+.glist{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--ink)}
+@media (min-width:760px){.glist{grid-template-columns:1fr 1fr;column-gap:40px}}
+.glist li{border-bottom:1px solid var(--rule)}
+.glist a{display:grid;gap:4px;padding:16px 0;text-decoration:none;color:var(--ink)}
+.glist .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.glist .t{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.25;color:var(--accent)}
+.glist a:hover .t{text-decoration:underline;text-underline-offset:.18em}
+.glist .d{font-size:14px;color:var(--ink-2)}
+
+/* FAQ */
+.faq{border-top:1px solid var(--ink);max-width:880px}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 32px 16px 0;font-weight:600;font-size:16.5px;position:relative;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:13px;font-family:var(--mono);font-size:20px;font-weight:400;color:var(--ink-2)}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin:0 0 16px;max-width:68ch;color:var(--ink-2)}
+
+/* Footer */
+.site-foot{margin-top:72px;border-top:2px solid var(--ink);padding-block:28px 40px;font-size:14px;color:var(--ink-2)}
+.foot-grid{display:grid;gap:24px}
+@media (min-width:760px){.foot-grid{grid-template-columns:2fr 1fr 1fr}}
+.site-foot h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 8px}
+.site-foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.site-foot .brandline{font-family:var(--display);font-weight:600;font-size:18px;color:var(--ink);margin:0 0 8px}
+.site-foot .disc{max-width:60ch;margin:0 0 8px}
+.site-foot .fine{margin-top:24px;padding-top:14px;border-top:1px solid var(--rule);font-size:12.5px}
+
+/* Lightbox */
+dialog.lb{border:0;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;background:rgba(12,14,16,.94);color:#eceae4}
+dialog.lb::backdrop{background:rgba(12,14,16,.94)}
+html.lb-open{overflow:hidden}
+.lb-wrap{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%;padding:12px max(12px,env(safe-area-inset-left,0px))}
+.lb-top{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px}
+.lb-top h2{font-family:var(--display);font-weight:600;font-size:16px;margin:0;color:#eceae4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-stage{display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0}
+.lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;background:#fff}
+.lb-bot{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px}
+.lb-cap{font-family:var(--mono);font-size:13px;color:#c9c6bf}
+.lb button{background:transparent;border:1px solid #6d727a;color:#eceae4;min-width:44px;min-height:44px;padding:0 14px;cursor:pointer;font-size:14px}
+.lb button:hover{border-color:#eceae4}
+.lb button:focus-visible{outline:2px solid #9cc5ef;outline-offset:2px}
+.lb .nav{display:flex;gap:8px}
+
+/* Guide pages */
+.crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:28px}
+.crumbs a{color:var(--ink-2)}
+.guide-layout{display:grid;gap:40px;padding-top:16px}
+@media (min-width:1040px){.guide-layout{grid-template-columns:minmax(0,1fr) 300px;gap:56px}}
+.guide-aside{min-width:0}
+@media (min-width:1040px){.guide-aside .card{position:sticky;top:76px}}
+.tcard{background:var(--sheet);border:1px solid var(--rule)}
+.tcard h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin:0;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.tcard ul{list-style:none;margin:0;padding:0}
+.tcard li{border-bottom:1px solid var(--rule-2)}
+.tcard li:last-child{border-bottom:0}
+.tcard li a{display:grid;grid-template-columns:72px 1fr;gap:4px 12px;padding:10px 14px;text-decoration:none;color:var(--ink);align-items:center}
+.tcard li a:hover .nm{text-decoration:underline;text-underline-offset:.18em}
+.tcard img{width:72px;height:45px;object-fit:cover;object-position:left top;border:1px solid var(--rule);background:#fff;grid-row:span 2}
+.tcard .nm{font-size:13.5px;font-weight:500;line-height:1.25}
+.tcard .pr{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.tcard .feat{background:var(--wash)}
+.tcard .feat .pr::after{content:" · used in this guide";font-family:var(--body)}
+.tcard .foot{padding:12px 14px;border-top:1px solid var(--rule);display:grid;gap:8px}
+.tcard .foot .btn{width:100%}
+article.post{max-width:70ch;display:grid;gap:18px}
+article.post h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.6vw,42px);line-height:1.12;letter-spacing:-.012em;margin:0;text-wrap:balance}
+article.post h2{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;margin:18px 0 0}
+article.post h3{font-size:17px;margin:8px 0 0}
+article.post p,article.post li{font-size:17px;line-height:1.62;margin:0}
+article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
+article.post .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+article.post .pointer{border-top:2px solid var(--ink);padding-top:16px;font-size:16px}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--sheet);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule-2);text-align:right;vertical-align:top;white-space:nowrap}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num thead th{background:var(--paper);font-weight:500;color:var(--ink);border-bottom:1px solid var(--ink)}
+table.num tr.hl td{font-weight:600;background:var(--wash)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.callout{background:var(--wash);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+.callout p{margin:0}
+.formula{font-family:var(--mono);font-size:14px;background:var(--sheet);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:10px 14px;overflow-x:auto;line-height:1.6}
+.more{border-top:1px solid var(--rule);padding-top:18px;margin-top:32px;display:grid;gap:8px;font-size:15px;max-width:70ch}
+.more h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin:0}
+.more ul{margin:0;padding-left:20px;display:grid;gap:6px}
+</style>
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="container">
+    <a class="brand" href="/" aria-label="Lender Ready Models, home"><b>Lender Ready Models</b><span>Excel underwriting templates</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="/#products">Templates</a></li>
+        <li class="hide-s"><a href="/#calc">Calculator</a></li>
+        <li class="hide-s"><a href="/#compare">Compare</a></li>
+        <li><a href="/#guides">Guides</a></li>
+        <li class="hide-s"><a href="/#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <a class="head-cta" href="https://mcginspark.gumroad.com" rel="noopener">Gumroad store</a>
+  </div>
+</header>
+<main id="main">
+<div class="container">
+  <div class="crumbs"><a href="/">Lender Ready Models</a> / <a href="/#guides">Guides</a> / Rent roll analysis</div>
+  <div class="guide-layout">
+    <div class="guide-main">
+<article class="post">
+<div class="eyebrow">Rent roll analysis</div>
+<h1>Loss-to-Lease Explained: Reading a Multifamily Rent Roll</h1>
+<p class="meta">Worked example from the Rent Roll Analyzer example case · 48 units · analysis date 1 October 2026</p>
+
+<p>Loss-to-lease is the gap between what a property's tenants are paying and what the same units would rent for today. It is the single most-quoted number in a multifamily offering memorandum, usually presented as upside, and it is also the number most likely to be wrong. This article explains how it is computed from a unit-level rent roll, what it is actually worth, and the two related figures, economic occupancy and lease expiration exposure, that tell you whether the upside is real.</p>
+
+<h2>The definition</h2>
+<div class="formula">Loss-to-lease (per unit) = market rent − in-place rent, for occupied units<br>Loss-to-lease (property) = sum across occupied units</div>
+<p>Two things in that definition carry all the weight. First, "market rent" is an input, not a fact. It is your estimate of what a unit of that type would lease for to a new tenant today, and every dollar of loss-to-lease depends on it. Second, the calculation only applies to occupied units. A vacant unit has no in-place rent to be below market; it is vacancy loss, which is a different line.</p>
+<p>A positive number means in-place rents are below market and leases should roll up. A negative number means tenants are paying more than a new tenant would, which is common after a period of rent growth followed by a softening market, and means the roll is going to roll down.</p>
+
+<h2>A single unit</h2>
+<p>The rent roll in the example case has 48 units in five types. Take unit 102, a 460-square-foot studio. The tenant pays $1,075 a month on a lease that runs to 26 December 2026. The market rent for studios, set on the unit mix sheet, is $1,250. Loss-to-lease is $175 a month, or 16.3 percent of in-place rent. The lease expires in 2.8 months from the analysis date, so the unit lands in the 1-to-3-month rollover bucket.</p>
+<p>Unit 106, a 495-square-foot studio, pays $1,210 against the same $1,250 market. Loss-to-lease is $40, or 3.3 percent. Same unit type, same market rent, very different upside. This is why the number has to be built from the unit level rather than from an average: the average hides which leases carry the gap and when they come up.</p>
+
+<h2>Rolling up to unit type</h2>
+<p>The unit mix sheet aggregates the roll by type and compares the average in-place rent with the market rent input:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Unit type</th><th>Units</th><th>Occupied</th><th>Avg in-place</th><th>Market</th><th>LTL / unit</th><th>Monthly LTL</th></tr></thead>
+<tbody>
+<tr><td>Studio</td><td>6</td><td>5</td><td>$1,112</td><td>$1,250</td><td>$138</td><td>$690</td></tr>
+<tr><td>1BR/1BA</td><td>16</td><td>16</td><td>$1,385</td><td>$1,525</td><td>$140</td><td>$2,245</td></tr>
+<tr><td>2BR/1BA</td><td>10</td><td>9</td><td>$1,616</td><td>$1,795</td><td>$179</td><td>$1,615</td></tr>
+<tr><td>2BR/2BA</td><td>12</td><td>10</td><td>$1,734</td><td>$1,925</td><td>$191</td><td>$1,910</td></tr>
+<tr><td>3BR/2BA</td><td>4</td><td>4</td><td>$2,040</td><td>$2,250</td><td>$210</td><td>$630</td></tr>
+<tr class="hl"><td>Total</td><td>48</td><td>44</td><td>$1,528</td><td>$1,707</td><td>$179</td><td>$7,090</td></tr>
+</tbody></table></div>
+
+<p>Across the occupied units, in-place rent is $67,800 a month against a market rent for all 48 units of $81,950. The property is roughly 10 percent below market on a per-unit basis. That sounds like a clean story. The next two numbers complicate it.</p>
+
+<h2>Economic occupancy</h2>
+<div class="formula">Physical occupancy = occupied units ÷ total units<br>Economic occupancy = in-place rent collected ÷ market gross potential rent</div>
+<p>The example property has 44 of 48 units occupied, including one on notice: 91.7 percent physical occupancy. But the in-place rent of $67,800 is only 82.7 percent of the $81,950 the property would collect if every unit were leased at market. The nine-point gap between the two occupancy measures is the combined effect of vacancy and loss-to-lease, and it is the honest measure of how far the property is from its potential. A broker will quote the 91.7. A lender will compute the 82.7.</p>
+
+<h2>Lease expirations decide when the upside arrives</h2>
+<p>Loss-to-lease is only realized when a lease ends and the unit is re-let or renewed at market. The expiration schedule in the example case is concentrated:</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th>Bucket</th><th>Units</th><th>% of units</th><th>Monthly rent at risk</th></tr></thead>
+<tbody>
+<tr><td>Vacant now</td><td>4</td><td>8.3%</td><td>$0</td></tr>
+<tr><td>0–1 month</td><td>1</td><td>2.1%</td><td>$2,085</td></tr>
+<tr><td>1–3 months</td><td>10</td><td>20.8%</td><td>$14,900</td></tr>
+<tr><td>3–6 months</td><td>13</td><td>27.1%</td><td>$20,540</td></tr>
+<tr><td>6–12 months</td><td>20</td><td>41.7%</td><td>$30,275</td></tr>
+<tr><td>12+ months</td><td>0</td><td>0%</td><td>$0</td></tr>
+</tbody></table></div>
+
+<p>Twenty-four units, half the property, roll within six months, carrying $37,525 of monthly rent. The loss-to-lease sitting in those near-term leases is $3,610 a month. That is good news for the mark-to-market case, since the upside arrives quickly, and bad news for the risk case, since half the rent roll is exposed to turnover, vacancy and re-leasing cost in the same window. A lender will ask about this concentration before they ask about anything else on the roll, because a 50 percent six-month rollover is a cash flow volatility problem whichever direction rents move.</p>
+
+<h2>From loss-to-lease to NOI and value</h2>
+<p>The analysis sheet in the template runs the pro forma twice. The in-place column starts from market gross potential rent of $983,400, deducts the loss-to-lease that the occupied-status units are currently leaving on the table, then vacancy at 6 percent, and adds other income of $60 per unit per month. The mark-to-market column skips the loss-to-lease deduction. Expenses are the same in both: $4,300 per unit of controllable costs, $118,000 of taxes, $42,000 of insurance, a 3 percent management fee and $300 per unit of reserves.</p>
+
+<div class="tablewrap"><table class="num">
+<thead><tr><th></th><th>In-place</th><th>Mark-to-market</th></tr></thead>
+<tbody>
+<tr><td>Effective gross income</td><td>$898,896</td><td>$958,956</td></tr>
+<tr><td>Net operating income</td><td>$491,129</td><td>$549,387</td></tr>
+<tr><td>Expense ratio</td><td>45.4%</td><td>42.7%</td></tr>
+<tr><td>Value at 6.25% cap rate</td><td>$7,858,066</td><td>$8,790,197</td></tr>
+</tbody></table></div>
+
+<p>The NOI uplift from rolling leases to market is $58,258, and at a 6.25 percent cap rate that is $932,131 of value, about $19,400 per unit. That is the number a seller's broker will put on the cover. Whether it is worth paying for depends on the questions above: is the market rent assumption defensible, how quickly do the leases roll, and what does it cost in vacancy and turnover to get there.</p>
+
+<h2>Three habits that keep loss-to-lease honest</h2>
+<ul>
+<li><strong>Test the market rent against the roll itself.</strong> The most recent leases signed are the best evidence of market. If the newest studio lease on the roll is at $1,210 and the market rent input is $1,250, the input is doing a lot of work.</li>
+<li><strong>Separate the statuses.</strong> Occupied, vacant, on notice, model and down units are not the same thing. Model and down units produce no rent and should not count in either occupancy measure as revenue. Notice units count as occupied today but are rollover inside 30 days.</li>
+<li><strong>Underwrite the timing.</strong> A dollar of loss-to-lease on a lease expiring in two months is worth more than a dollar on a lease expiring in eleven. The expiration schedule tells you how much of the upside is reachable in year one.</li>
+</ul>
+
+<p class="pointer">The figures above come from the example rent roll in the <strong>Multifamily Rent Roll Analyzer</strong>, an Excel template that takes a pasted unit-level roll of up to 150 units and produces per-unit loss-to-lease, physical and economic occupancy, expiration buckets with the six-month concentration, unit-mix economics, and in-place versus mark-to-market NOI and value. It is available for $69 from the <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Lender Ready Models store on eFinancialModels</a>. Set the market rents, paste your roll and the tables in this article rebuild for your property.</p>
+</article>
+<section class="more" aria-labelledby="more-h"><h2 id="more-h">More guides</h2><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></section></div>
+    <aside class="guide-aside" aria-label="Templates"><div class="card tcard"><h2>Templates</h2><ul><li class="feat"><a href="/#rentroll"><img src="/img/t/rentroll-1-analysis.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Rent Roll Analyzer</span><span class="pr">$69</span></a></li><li><a href="/#dscr"><img src="/img/t/dscr-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">DSCR Debt Sizing</span><span class="pr">$79</span></a></li><li><a href="/#waterfall"><img src="/img/t/waterfall-1-returns.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Equity Waterfall</span><span class="pr">$89</span></a></li><li><a href="/#construction"><img src="/img/t/construction-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Construction Loan</span><span class="pr">$129</span></a></li><li><a href="/#debtfund"><img src="/img/t/debtfund-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Debt Fund Model</span><span class="pr">$169</span></a></li><li><a href="/#bridge"><img src="/img/t/bridge-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Bridge-to-Agency Refi</span><span class="pr">$139</span></a></li><li><a href="/#storage"><img src="/img/t/storage-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span class="nm">Self-Storage Lease-Up</span><span class="pr">$119</span></a></li></ul><div class="foot"><a class="btn" href="https://mcginspark.gumroad.com/l/rent-roll-analyzer" rel="noopener">Buy Rent Roll Analyzer, $69</a><a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels</a></div></div></aside>
+  </div>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <p class="brandline">Lender Ready Models</p>
+        <p class="disc">Built and tested by an AI system under a finance professional&#x27;s specification; every workbook is recalculated with an independent engine before release. Modelling tools, not financial, investment, lending or legal advice.</p>
+        <p>Support: <a href="mailto:thehelp@inkboxmail.com">thehelp@inkboxmail.com</a></p>
+        <p>Sold on <a href="https://mcginspark.gumroad.com" rel="noopener">Gumroad</a> and <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>.</p>
+      </div>
+      <nav aria-label="Templates"><h2>Templates</h2><ul><li><a href="/#dscr">DSCR Debt Sizing</a> <span class="num">$79</span></li><li><a href="/#waterfall">Equity Waterfall</a> <span class="num">$89</span></li><li><a href="/#rentroll">Rent Roll Analyzer</a> <span class="num">$69</span></li><li><a href="/#construction">Construction Loan</a> <span class="num">$129</span></li><li><a href="/#debtfund">Debt Fund Model</a> <span class="num">$169</span></li><li><a href="/#bridge">Bridge-to-Agency Refi</a> <span class="num">$139</span></li><li><a href="/#storage">Self-Storage Lease-Up</a> <span class="num">$119</span></li></ul></nav>
+      <nav aria-label="Guides"><h2>Guides</h2><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></nav>
+    </div>
+    <p class="fine">Example figures on this site come from the templates' own example cases and are illustrative only. Single-user licence per purchase.</p>
+  </div>
+</footer>
+
+</body>
+</html>

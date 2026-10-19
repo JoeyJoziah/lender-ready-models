@@ -4,203 +4,935 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lender Ready Models: Excel Real Estate Underwriting Templates</title>
-<meta name="description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), equity waterfalls with IRR hurdles, and multifamily rent roll analysis. Live formulas, no macros. Sold on eFinancialModels.">
-<link rel="canonical" href="https://REPLACE-WITH-DOMAIN/">
+<meta name="description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), construction and bridge loans, equity waterfalls, rent roll analysis, self-storage lease-up and debt fund returns. Live formulas, no macros.">
+<link rel="canonical" href="https://lender-ready-models.onrender.com/">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111416" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lender Ready Models: Excel Real Estate Underwriting Templates">
-<meta property="og:description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), equity waterfalls with IRR hurdles, and multifamily rent roll analysis. Live formulas, no macros. Sold on eFinancialModels.">
+<meta property="og:description" content="Excel templates for real estate debt sizing (DSCR, LTV, debt yield), construction and bridge loans, equity waterfalls, rent roll analysis, self-storage lease-up and debt fund returns. Live formulas, no macros.">
+<meta property="og:url" content="https://lender-ready-models.onrender.com/">
+<meta property="og:image" content="https://lender-ready-models.onrender.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index,follow">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d477a'/%3E%3Cpath d='M8 9v14h16' stroke='%23fff' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Lender Ready Models: ledger-paper token system (shared across every page). */
 :root{
-  --bg:#f7f6f2; --fg:#1b1f24; --muted:#5b6370; --rule:#d6d3cb; --card:#ffffff;
-  --accent:#0f4c81; --accent-ink:#ffffff; --tint:#e8eef5; --ok:#2e6b3a;
-  --display:"IBM Plex Serif",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",Menlo,monospace;
+  --paper:#f5f4ef; --sheet:#ffffff; --ink:#15191e; --ink-2:#4a525c; --ink-3:#6b7380;
+  --rule:#d8d5cc; --rule-2:#e7e4dc; --accent:#0d477a; --accent-ink:#ffffff; --wash:#e6edf4; --pos:#1d6a37;
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif; --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:16px; --max:1200px; color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#15181c;--fg:#e8e6e0;--muted:#9aa3ad;--rule:#2d333b;--card:#1d2126;--accent:#7fb3e6;--accent-ink:#0f1620;--tint:#1f2a36;--ok:#7fc48b;color-scheme:dark}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
-.wrap{max-width:880px;margin:0 auto;display:grid;gap:36px}
-a{color:var(--accent)}
-nav.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
-nav.top .brand{font-family:var(--display);font-weight:600;font-size:18px;color:var(--fg);text-decoration:none;margin-right:auto}
-nav.top a{text-decoration:none}
-header.hero{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:24px}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.12;margin:0;text-wrap:balance}
-.lede{max-width:62ch;font-size:17px;margin:0}
-.disc{font-size:13px;color:var(--muted);max-width:70ch;margin:0}
-.products{display:grid;gap:22px}
-.card{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:1fr auto;gap:0}
-.card>.main{padding:22px 24px;min-width:0;display:grid;gap:12px}
-.card>.buy{border-left:1px solid var(--rule);padding:22px 24px;display:grid;align-content:start;gap:10px;min-width:160px}
-h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.2}
-.for{color:var(--muted);font-size:14px}
-.spec{font-family:var(--mono);font-size:13px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;border-top:1px dashed var(--rule);padding-top:12px;font-variant-numeric:tabular-nums;margin:0}
-.spec dt{color:var(--muted)}.spec dd{margin:0;min-width:0}
-.price{font-family:var(--display);font-size:30px;font-weight:600;line-height:1}
-.price small{font-family:var(--mono);font-size:12px;color:var(--muted);display:block;margin-top:4px}
-.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 14px;text-align:center;font-size:14px}
-.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
-.bundle{background:var(--tint)}
-.ok{color:var(--ok);font-family:var(--mono);font-size:12px}
-.faq{display:grid;gap:14px;border-top:1px solid var(--rule);padding-top:24px}
-.faq h3{font-size:15px;margin:0 0 4px}
-.faq p{margin:0;max-width:68ch;color:var(--muted)}
-.guides{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:24px}
-.guides ul{margin:0;padding-left:20px;display:grid;gap:8px}
-.guides li{max-width:70ch}
-.guides small{display:block;color:var(--muted);font-size:13px}
-/* Article pages */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111416; --sheet:#181c20; --ink:#e8e6e0; --ink-2:#a9b1bb; --ink-3:#8b939d;
+  --rule:#2c3238; --rule-2:#22272c; --accent:#8db9e6; --accent-ink:#0a1420; --wash:#172331; --pos:#86c99c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111416; --sheet:#181c20; --ink:#e8e6e0; --ink-2:#a9b1bb; --ink-3:#8b939d;
+  --rule:#2c3238; --rule-2:#22272c; --accent:#8db9e6; --accent-ink:#0a1420; --wash:#172331; --pos:#86c99c; color-scheme:dark}
+@media (min-width:760px){:root{--gut:32px}}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button{font:inherit;color:inherit}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.container{max-width:var(--max);margin:0 auto;padding-inline:max(var(--gut),env(safe-area-inset-left,0px)) max(var(--gut),env(safe-area-inset-right,0px))}
+.skip{position:absolute;left:8px;top:-60px;background:var(--ink);color:var(--paper);padding:8px 12px;z-index:50;text-decoration:none}
+.skip:focus{top:8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+
+/* Header */
+.site-head{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--rule)}
+.site-head .container{display:flex;align-items:center;gap:16px;min-height:56px}
+.brand{display:flex;align-items:baseline;gap:10px;color:var(--ink);text-decoration:none;margin-right:auto;white-space:nowrap}
+.brand b{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.005em}
+.brand span{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;display:none}
+@media (min-width:1040px){.brand span{display:inline}}
+.site-nav ul{display:flex;gap:4px 20px;list-style:none;margin:0;padding:0}
+.site-nav a{color:var(--ink-2);text-decoration:none;font-size:14px;padding:6px 0}
+.site-nav a:hover{color:var(--ink)}
+.site-nav .hide-s{display:none}
+@media (min-width:760px){.site-nav .hide-s{display:list-item}}
+.head-cta{font-size:14px;font-weight:600;text-decoration:none;color:var(--accent-ink);background:var(--accent);padding:8px 12px;white-space:nowrap;display:none}
+@media (min-width:560px){.head-cta{display:inline-block}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;font-size:15px;padding:12px 18px;border:1px solid var(--accent);min-height:44px}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+.btn .arr{font-family:var(--mono);font-weight:400}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper);filter:none}
+
+/* Hero */
+.hero{padding-block:40px 32px;border-bottom:1px solid var(--rule)}
+.hero-grid{display:grid;gap:32px;align-items:start}
+@media (min-width:1040px){.hero{padding-block:64px 48px}.hero-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(32px,5.4vw,52px);line-height:1.06;letter-spacing:-.015em;margin:14px 0 18px;text-wrap:balance}
+.hero .lede{font-size:18px;line-height:1.5;color:var(--ink-2);max-width:46ch;margin:0 0 26px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.hero .disc{font-size:13px;color:var(--ink-2);max-width:56ch;margin:0;padding-left:12px;border-left:2px solid var(--rule)}
+.sheetframe{background:var(--sheet);border:1px solid var(--rule);margin:0}
+.sheetframe .bar{display:flex;align-items:stretch;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--ink-2);min-height:34px}
+.sheetframe .bar .file{padding:8px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheetframe .bar .tab{padding:8px 12px;border-left:1px solid var(--rule);color:var(--ink);background:var(--paper);white-space:nowrap}
+.sheetframe button.zoom{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in}
+.sheetframe figcaption{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--ink-2);padding:9px 12px;border-top:1px solid var(--rule)}
+.sheetframe figcaption .num{white-space:nowrap}
+
+/* Trust row */
+.trust{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.trust li{padding:14px 14px 14px 0;border-bottom:1px solid var(--rule-2);display:grid;gap:2px;min-width:0}
+.trust li:nth-child(2n){padding-left:14px;border-left:1px solid var(--rule-2)}
+.trust b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:20px;line-height:1.2}
+.trust span{font-size:13px;color:var(--ink-2);line-height:1.35}
+.trust li:last-child{grid-column:1/-1;border-left:0;padding-left:0}
+@media (min-width:1040px){.trust{grid-template-columns:repeat(5,minmax(0,1fr))}.trust li,.trust li:nth-child(2n){padding:16px 16px;border-left:1px solid var(--rule-2);border-bottom:0}.trust li:first-child{border-left:0;padding-left:0}.trust li:last-child{grid-column:auto;border-left:1px solid var(--rule-2);padding-left:16px}}
+
+/* Section heads */
+section.block{padding-block:56px 8px}
+.sec-head{display:grid;gap:8px;margin-bottom:28px;max-width:72ch}
+.sec-head .eyebrow{display:flex;gap:10px;align-items:center}
+.sec-head .eyebrow::after{content:"";height:1px;background:var(--rule);flex:1;min-width:40px}
+.sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,3.6vw,36px);line-height:1.12;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sec-head p{margin:0;color:var(--ink-2);font-size:16.5px}
+
+/* Contents strip */
+.toc ol{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--ink)}
+@media (min-width:760px){.toc ol{grid-template-columns:1fr 1fr;column-gap:40px}}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc a{display:flex;align-items:baseline;gap:10px;padding:11px 0;color:var(--ink);text-decoration:none;min-height:44px}
+.toc a:hover .nm{text-decoration:underline;text-underline-offset:.18em}
+.toc .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);width:2ch}
+.toc .nm{font-weight:500}
+.toc .lead{flex:1;border-bottom:1px dotted var(--ink-3);transform:translateY(-4px);min-width:16px}
+.toc .cat{font-size:12.5px;color:var(--ink-3);display:none}
+@media (min-width:1040px){.toc .cat{display:inline}}
+.toc .pr{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Product */
+.product{padding-block:44px;border-top:1px solid var(--rule)}
+.product:first-of-type{border-top:0}
+.p-head{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:baseline;margin-bottom:22px}
+.p-head .pn{font-family:var(--mono);font-size:13px;color:var(--ink-3);grid-row:span 2;padding-top:6px}
+.p-head h3{font-family:var(--display);font-weight:600;font-size:clamp(22px,2.8vw,30px);line-height:1.15;margin:0;letter-spacing:-.008em;text-wrap:balance}
+.p-head .cat{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);grid-column:2;order:-1}
+.p-grid{display:grid;gap:28px}
+@media (min-width:1040px){.p-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px}}
+.gallery{min-width:0}
+.stage{background:var(--sheet);border:1px solid var(--rule)}
+.stage-btn{display:block;width:100%;padding:0;border:0;background:#fff;cursor:zoom-in;aspect-ratio:16/10;overflow:hidden;position:relative}
+.stage-btn img{width:100%;height:100%;object-fit:contain;object-position:center top}
+.stage-cap{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 12px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
+.stage-cap b{color:var(--ink);font-weight:500}
+.stage-cap .hint{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 6px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.tab{flex:0 0 auto;width:112px;display:grid;gap:6px;padding:0;border:0;background:none;text-align:left;cursor:pointer;scroll-snap-align:start}
+.tab img{width:112px;height:70px;object-fit:cover;object-position:left top;border:1px solid var(--rule);background:#fff;opacity:.72}
+.tab span{font-size:12.5px;color:var(--ink-2);line-height:1.25;padding-bottom:4px;border-bottom:2px solid transparent}
+.tab:hover img{opacity:1}
+.tab[aria-selected="true"] img{opacity:1;outline:2px solid var(--accent);outline-offset:-1px}
+.tab[aria-selected="true"] span{color:var(--ink);border-bottom-color:var(--accent);font-weight:500}
+@media (min-width:760px){.tab{width:128px}.tab img{width:128px;height:80px}}
+.p-info{display:grid;gap:22px;align-content:start;min-width:0}
+.p-info .lede{margin:0;font-size:16.5px}
+.p-info .for{margin:0;font-size:14px;color:var(--ink-2)}
+.p-info .for b{font-weight:500;color:var(--ink)}
+dl.spec{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);border-top:1px solid var(--rule);font-size:14px}
+dl.spec dt,dl.spec dd{padding:8px 0;border-bottom:1px solid var(--rule-2);margin:0}
+dl.spec dt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);padding-right:16px;padding-top:10px}
+.excase{background:var(--sheet);border:1px solid var(--rule)}
+.excase .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:10px 14px 0}
+.excase .assume{font-size:13px;color:var(--ink-2);padding:2px 14px 10px;border-bottom:1px solid var(--rule);margin:0}
+dl.ledger{margin:0;padding:4px 14px 8px}
+dl.ledger div{display:flex;align-items:baseline;gap:8px;padding:6px 0;font-size:14px}
+dl.ledger dt{color:var(--ink-2);flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:8px}
+dl.ledger dt::after{content:"";flex:1 1 12px;border-bottom:1px dotted var(--ink-3);opacity:.6;transform:translateY(-4px);min-width:12px}
+dl.ledger dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+dl.ledger .hl dt{color:var(--ink);font-weight:500}
+dl.ledger .hl dd{font-weight:500;color:var(--accent);background:var(--wash);padding:1px 6px;margin-right:-6px}
+.buy{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:center;border-top:2px solid var(--ink);padding-top:16px}
+.price{font-family:var(--display);font-weight:600;font-size:40px;line-height:1;font-variant-numeric:tabular-nums lining-nums}
+.price .cur{font-size:.55em;vertical-align:.62em;margin-right:2px;color:var(--ink-2)}
+.buy-meta{font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.buy .actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:10px}
+.buy .alt{font-size:14px}
+.related{font-size:13.5px;color:var(--ink-2);margin:0}
+
+/* Calculators */
+.calc{background:var(--sheet);border:1px solid var(--rule);margin-bottom:28px}
+.calc-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.calc-head h3{font-family:var(--display);font-weight:600;font-size:21px;margin:0}
+.calc-head .note{font-size:12.5px;color:var(--ink-2);font-family:var(--mono)}
+.calc-body{display:grid;gap:0}
+@media (min-width:1040px){.calc-body{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}.calc-body.wide-in{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+.calc-in{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;align-content:start;border-bottom:1px solid var(--rule)}
+@media (min-width:1040px){.calc-in{border-bottom:0;border-right:1px solid var(--rule)}}
+.field{display:grid;gap:5px;min-width:0}
+.field label{font-size:13px;color:var(--ink-2);line-height:1.25}
+.field .inp{display:flex;align-items:stretch;border:1px solid var(--ink-3);background:var(--paper)}
+.field .inp:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.field .u{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding:0 8px;display:flex;align-items:center;background:var(--rule-2)}
+.field input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--ink);font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px;padding:9px 10px;outline:none;-moz-appearance:textfield;appearance:textfield}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.field input[aria-invalid="true"]{color:#b3261e}
+.reset{grid-column:1/-1;justify-self:start;background:none;border:0;padding:6px 0;color:var(--accent);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;font-size:14px}
+.calc-out{padding:18px;display:grid;gap:18px;align-content:start;min-width:0}
+.headline{display:grid;gap:4px;border-bottom:1px solid var(--rule);padding-bottom:14px}
+.headline .k{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.headline .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(30px,5vw,40px);font-weight:500;line-height:1.1}
+.headline .s{font-size:14px;color:var(--ink-2)}
+.headline .s b{color:var(--ink);font-weight:600}
+.bars{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.bars li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:14px}
+.bars .lab{color:var(--ink-2)}
+.bars .val{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.bars .track{grid-column:1/-1;height:10px;background:var(--rule-2);position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--ink-3);opacity:.55}
+.bars li.bind .lab{color:var(--ink);font-weight:500}
+.bars li.bind .fill{background:var(--accent);opacity:1}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;padding:0 5px;margin-left:8px;color:var(--accent);white-space:nowrap}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--rule);margin:0}
+@media (min-width:760px){.kv{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kv div{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-2);min-width:0}
+.kv dt{font-size:12px;color:var(--ink-2);line-height:1.3}
+.kv dd{margin:2px 0 0;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
+.calc-foot{padding:12px 18px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+@media (prefers-reduced-motion:no-preference){.bars .fill{transition:width .25s ease}}
+/* LTL grid */
+.ltl-in{padding:18px;display:grid;gap:14px;border-bottom:1px solid var(--rule);min-width:0}
+@media (min-width:1040px){.ltl-in{border-bottom:0;border-right:1px solid var(--rule)}}
+.ltl-cols{display:none}
+.ltl-row{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;min-width:0;align-items:end}
+.ltl-row .legend{font-weight:600;font-size:14px;grid-column:1/-1}
+.ltl-row+.ltl-row{border-top:1px solid var(--rule-2);padding-top:12px}
+@media (min-width:600px){
+  .ltl-cols{display:grid;grid-template-columns:76px repeat(4,minmax(0,1fr));gap:10px;font-size:12px;color:var(--ink-2);line-height:1.25}
+  .ltl-row{grid-template-columns:76px repeat(4,minmax(0,1fr));align-items:center}
+  .ltl-row .legend{grid-column:auto;font-size:13.5px}
+  .ltl-row .field label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .ltl-row+.ltl-row{padding-top:10px}
+}
+.ltl-in .settings{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;border-top:1px solid var(--rule);padding-top:14px}
+.warn{color:#b3261e;font-size:13px;margin:0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .warn,:root:not([data-theme="light"]) .field input[aria-invalid="true"]{color:#ff8a80}}
+
+/* Compare */
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--sheet);border:1px solid var(--rule)}
+.cmp th,.cmp td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--rule-2)}
+.cmp thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;border-bottom:1px solid var(--ink);background:var(--paper)}
+.cmp tbody th{font-weight:600}
+.cmp tbody th a{color:var(--ink);text-decoration:none}
+.cmp tbody th a:hover{text-decoration:underline}
+.cmp .pr{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.cmp .hz{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+@media (max-width:899px){
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block}
+  .cmp thead{display:none}
+  .cmp tr{padding:12px 14px;border-bottom:1px solid var(--rule)}
+  .cmp th,.cmp td{padding:2px 0;border:0}
+  .cmp td::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+  .cmp .pr{text-align:left}
+}
+
+/* Guides list */
+.glist{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--ink)}
+@media (min-width:760px){.glist{grid-template-columns:1fr 1fr;column-gap:40px}}
+.glist li{border-bottom:1px solid var(--rule)}
+.glist a{display:grid;gap:4px;padding:16px 0;text-decoration:none;color:var(--ink)}
+.glist .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.glist .t{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.25;color:var(--accent)}
+.glist a:hover .t{text-decoration:underline;text-underline-offset:.18em}
+.glist .d{font-size:14px;color:var(--ink-2)}
+
+/* FAQ */
+.faq{border-top:1px solid var(--ink);max-width:880px}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 32px 16px 0;font-weight:600;font-size:16.5px;position:relative;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:13px;font-family:var(--mono);font-size:20px;font-weight:400;color:var(--ink-2)}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin:0 0 16px;max-width:68ch;color:var(--ink-2)}
+
+/* Footer */
+.site-foot{margin-top:72px;border-top:2px solid var(--ink);padding-block:28px 40px;font-size:14px;color:var(--ink-2)}
+.foot-grid{display:grid;gap:24px}
+@media (min-width:760px){.foot-grid{grid-template-columns:2fr 1fr 1fr}}
+.site-foot h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 8px}
+.site-foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.site-foot .brandline{font-family:var(--display);font-weight:600;font-size:18px;color:var(--ink);margin:0 0 8px}
+.site-foot .disc{max-width:60ch;margin:0 0 8px}
+.site-foot .fine{margin-top:24px;padding-top:14px;border-top:1px solid var(--rule);font-size:12.5px}
+
+/* Lightbox */
+dialog.lb{border:0;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;background:rgba(12,14,16,.94);color:#eceae4}
+dialog.lb::backdrop{background:rgba(12,14,16,.94)}
+html.lb-open{overflow:hidden}
+.lb-wrap{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%;padding:12px max(12px,env(safe-area-inset-left,0px))}
+.lb-top{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px}
+.lb-top h2{font-family:var(--display);font-weight:600;font-size:16px;margin:0;color:#eceae4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-stage{display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0}
+.lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;background:#fff}
+.lb-bot{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px}
+.lb-cap{font-family:var(--mono);font-size:13px;color:#c9c6bf}
+.lb button{background:transparent;border:1px solid #6d727a;color:#eceae4;min-width:44px;min-height:44px;padding:0 14px;cursor:pointer;font-size:14px}
+.lb button:hover{border-color:#eceae4}
+.lb button:focus-visible{outline:2px solid #9cc5ef;outline-offset:2px}
+.lb .nav{display:flex;gap:8px}
+
+/* Guide pages */
+.crumbs{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:28px}
+.crumbs a{color:var(--ink-2)}
+.guide-layout{display:grid;gap:40px;padding-top:16px}
+@media (min-width:1040px){.guide-layout{grid-template-columns:minmax(0,1fr) 300px;gap:56px}}
+.guide-aside{min-width:0}
+@media (min-width:1040px){.guide-aside .card{position:sticky;top:76px}}
+.tcard{background:var(--sheet);border:1px solid var(--rule)}
+.tcard h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin:0;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.tcard ul{list-style:none;margin:0;padding:0}
+.tcard li{border-bottom:1px solid var(--rule-2)}
+.tcard li:last-child{border-bottom:0}
+.tcard li a{display:grid;grid-template-columns:72px 1fr;gap:4px 12px;padding:10px 14px;text-decoration:none;color:var(--ink);align-items:center}
+.tcard li a:hover .nm{text-decoration:underline;text-underline-offset:.18em}
+.tcard img{width:72px;height:45px;object-fit:cover;object-position:left top;border:1px solid var(--rule);background:#fff;grid-row:span 2}
+.tcard .nm{font-size:13.5px;font-weight:500;line-height:1.25}
+.tcard .pr{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.tcard .feat{background:var(--wash)}
+.tcard .feat .pr::after{content:" · used in this guide";font-family:var(--body)}
+.tcard .foot{padding:12px 14px;border-top:1px solid var(--rule);display:grid;gap:8px}
+.tcard .foot .btn{width:100%}
 article.post{max-width:70ch;display:grid;gap:18px}
-article.post h2{font-size:21px;margin-top:14px}
+article.post h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.6vw,42px);line-height:1.12;letter-spacing:-.012em;margin:0;text-wrap:balance}
+article.post h2{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;margin:18px 0 0}
 article.post h3{font-size:17px;margin:8px 0 0}
-article.post p,article.post li{font-size:16.5px;margin:0}
+article.post p,article.post li{font-size:17px;line-height:1.62;margin:0}
 article.post ul,article.post ol{margin:0;padding-left:22px;display:grid;gap:6px}
-article.post .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
-table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--card);border:1px solid var(--rule)}
-table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:top}
+article.post .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+article.post .pointer{border-top:2px solid var(--ink);padding-top:16px;font-size:16px}
+table.num{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;background:var(--sheet);border:1px solid var(--rule)}
+table.num th,table.num td{padding:7px 10px;border-bottom:1px solid var(--rule-2);text-align:right;vertical-align:top;white-space:nowrap}
 table.num th:first-child,table.num td:first-child{text-align:left}
-table.num thead th{background:var(--tint);font-weight:500;color:var(--fg)}
-table.num tr.hl td{font-weight:600}
-.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.callout{background:var(--tint);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
+table.num thead th{background:var(--paper);font-weight:500;color:var(--ink);border-bottom:1px solid var(--ink)}
+table.num tr.hl td{font-weight:600;background:var(--wash)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.callout{background:var(--wash);border-left:3px solid var(--accent);padding:14px 18px;display:grid;gap:8px}
 .callout p{margin:0}
-.formula{font-family:var(--mono);font-size:14px;background:var(--card);border:1px solid var(--rule);padding:10px 14px;overflow-x:auto}
-.pointer{border-top:1px solid var(--rule);padding-top:18px}
-.more{border-top:1px solid var(--rule);padding-top:18px;display:grid;gap:8px;font-size:15px}
+.formula{font-family:var(--mono);font-size:14px;background:var(--sheet);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:10px 14px;overflow-x:auto;line-height:1.6}
+.more{border-top:1px solid var(--rule);padding-top:18px;margin-top:32px;display:grid;gap:8px;font-size:15px;max-width:70ch}
+.more h2{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin:0}
 .more ul{margin:0;padding-left:20px;display:grid;gap:6px}
-footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px;display:grid;gap:6px}
-@media (max-width:620px){.card{grid-template-columns:1fr}.card>.buy{border-left:0;border-top:1px solid var(--rule)}}
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "Product", "name": "DSCR Debt Sizing & Loan Underwriting Model", "description": "Size the maximum loan on a stabilized property under LTV, DSCR and debt yield, see which constraint binds, and stress it against rate and NOI.", "image": "https://lender-ready-models.onrender.com/img/dscr-1-dashboard.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "79.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/dscr-debt-sizing-model"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "Product", "name": "Equity Waterfall Model (IRR Hurdles & Promote)", "description": "LP/GP distribution waterfall with up to four IRR hurdle tiers, a hypothetical capital account shown for every tier, and returns and promote by party.", "image": "https://lender-ready-models.onrender.com/img/waterfall-1-returns.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "89.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/equity-waterfall-model"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "Product", "name": "Multifamily Rent Roll Analyzer", "description": "Paste a unit-level rent roll and get loss-to-lease, physical and economic occupancy, lease-expiration exposure, and in-place versus mark-to-market NOI and value.", "image": "https://lender-ready-models.onrender.com/img/rentroll-1-analysis.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "69.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/rent-roll-analyzer"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "Product", "name": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve", "description": "Draws the budget on an S-curve with retainage, funds equity first, sizes the loan at the lower of LTC and LTV, solves the interest reserve without circular references, then tests the permanent-loan takeout.", "image": "https://lender-ready-models.onrender.com/img/construction-1-dashboard.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "129.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/construction-loan-model-v2"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "Product", "name": "Private Credit / Real Estate Debt Fund Model", "description": "Ten-year closed-end debt fund: deployment, credit losses, subscription line and back leverage, fees, and a European waterfall with a true GP catch-up, reported the way an LP reads it.", "image": "https://lender-ready-models.onrender.com/img/debtfund-1-dashboard.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "169.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/debt-fund-returns-model"}}}, {"@type": "ListItem", "position": 6, "item": {"@type": "Product", "name": "Bridge-to-Agency Refinance Model (Value-Add Multifamily)", "description": "Sizes the bridge loan on purchase plus renovation, rolls units to market rent month by month, and tests whether the agency takeout repays the bridge with cash out, then carries the deal to sale.", "image": "https://lender-ready-models.onrender.com/img/bridge-1-dashboard.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "139.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/bridge-to-agency-refi-model"}}}, {"@type": "ListItem", "position": 7, "item": {"@type": "Product", "name": "Self-Storage Acquisition & Lease-Up Underwriting Model", "description": "A ten-year monthly self-storage model: eight-type unit mix, month-by-month absorption to stabilized occupancy, ECRI step-ups toward street rate, a loan sized at the lowest of LTV, DSCR and debt yield, and LP/GP returns.", "image": "https://lender-ready-models.onrender.com/img/storage-1-dashboard.webp", "brand": {"@type": "Brand", "name": "Lender Ready Models"}, "offers": {"@type": "Offer", "price": "119.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://mcginspark.gumroad.com/l/self-storage-underwriting-model"}}}]}</script>
 </head>
 <body>
-<div class="wrap">
-<nav class="top" aria-label="Site">
-  <a class="brand" href="/">Lender Ready Models</a>
-  <a href="/#guides">Guides</a>
-  <a href="/#products">Templates</a>
-  <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Store on eFinancialModels</a>
-</nav>
-
-<header class="hero">
-  <div class="eyebrow">Excel underwriting templates · real estate debt and equity</div>
-  <h1>Lender Ready Models</h1>
-  <p class="lede">Six workbooks that do the arithmetic a lender, an LP or an investment committee will do to your deal before they say yes. Every cell is a live formula. No macros, no add-ins, no hidden sheets.</p>
-  <p class="disc">Built and tested by an AI system; each file is recalculated and reviewed before release and updated when buyers report an edge case. Modelling tools only, not financial, investment, lending or legal advice.</p>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="container">
+    <a class="brand" href="/" aria-label="Lender Ready Models, home"><b>Lender Ready Models</b><span>Excel underwriting templates</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="/#products">Templates</a></li>
+        <li class="hide-s"><a href="/#calc">Calculator</a></li>
+        <li class="hide-s"><a href="/#compare">Compare</a></li>
+        <li><a href="/#guides">Guides</a></li>
+        <li class="hide-s"><a href="/#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <a class="head-cta" href="https://mcginspark.gumroad.com" rel="noopener">Gumroad store</a>
+  </div>
 </header>
-
-<section class="products" id="products" aria-label="Products">
-  <article class="card">
-    <div class="main">
-      <h2>DSCR Debt Sizing &amp; Loan Underwriting Model</h2>
-      <div class="for">For buyers of stabilized multifamily, storage, retail and industrial; mortgage brokers packaging a request.</div>
-      <dl class="spec">
-        <dt>Sizes on</dt><dd>LTV · DSCR (amortizing) · debt yield · binding constraint flagged</dd>
-        <dt>Schedule</dt><dd>360 months, interest-only period honoured</dd>
-        <dt>Stress</dt><dd>7×7 grids: max loan and DSCR vs rate and NOI</dd>
-        <dt>Example</dt><dd>48 units, $6.4M price, 1.25x min DSCR → $3.934M loan, DSCR binds</dd>
-      </dl>
+<main id="main">
+<section class="hero" aria-labelledby="hero-h">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Excel underwriting templates · real estate debt and equity</div>
+        <h1 id="hero-h">The arithmetic your lender will run, done before they run it.</h1>
+        <p class="lede">Seven workbooks that size the loan, split the cash and stress the deal the way a lender, an LP or a credit committee will. Every cell is a live formula you can read and change.</p>
+        <div class="ctas">
+          <a class="btn" href="#products">See the seven templates <span class="arr" aria-hidden="true">↓</span></a>
+          <a class="btn btn-ghost" href="#calc">Try the loan sizer</a>
+        </div>
+        <p class="disc">Built by an AI system under a finance professional's specification. Each workbook is recalculated with an independent engine and reviewed before release. Modelling tools, not financial, investment, lending or legal advice.</p>
+      </div>
+      <figure class="sheetframe">
+        <div class="bar"><span class="file">DSCR_Debt_Sizing_Model.xlsx</span><span class="tab">Dashboard</span></div>
+        <button type="button" class="zoom" data-open="dscr" data-i="0" aria-label="Enlarge: DSCR Debt Sizing Model dashboard">
+          <img src="/img/dscr-1-dashboard.webp" width="1226" height="699" alt="DSCR Debt Sizing Model dashboard for the 48-unit example case: maximum loan $3,934,000, debt service coverage binding, 61.5% LTV, 1.25x DSCR, 9.73% debt yield" fetchpriority="high" decoding="async">
+        </button>
+        <figcaption><span>Dashboard sheet, example case: 48 units, $6.4M price</span><span class="num">$3,934,000 · DSCR binds</span></figcaption>
+      </figure>
     </div>
-    <div class="buy"><div class="price">$79<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/dscr-debt-sizing-model" rel="noopener">Buy now ($79)</a><span class="ok">.xlsx · Excel 2016+ · LibreOffice</span></div>
-  </article>
-
-  <article class="card">
-    <div class="main">
-      <h2>Equity Waterfall Model</h2>
-      <div class="for">For sponsors building an offering, LPs checking a deck, analysts explaining a promote to a committee.</div>
-      <dl class="spec">
-        <dt>Structure</dt><dd>Up to 4 tiers · IRR hurdles · LP/GP split per tier · residual</dd>
-        <dt>Method</dt><dd>European whole-fund IRR lookback, capital account shown per tier</dd>
-        <dt>Outputs</dt><dd>IRR, MOIC, profit by party · promote $ · LP IRR give-up</dd>
-        <dt>Checks</dt><dd>4 reconciliations that must read zero or OK</dd>
-      </dl>
-    </div>
-    <div class="buy"><div class="price">$89<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/equity-waterfall-model" rel="noopener">Buy now ($89)</a><span class="ok">.xlsx · annual periods · 10 years</span></div>
-  </article>
-
-  <article class="card">
-    <div class="main">
-      <h2>Multifamily Rent Roll Analyzer</h2>
-      <div class="for">For anyone buying, refinancing or asset-managing 10 to 150 units.</div>
-      <dl class="spec">
-        <dt>Capacity</dt><dd>150 units · 5 unit types · Occupied / Vacant / Notice / Model / Down</dd>
-        <dt>Computes</dt><dd>Loss-to-lease · physical and economic occupancy · rent per SF</dd>
-        <dt>Rollover</dt><dd>Expirations by bucket, six-month concentration</dd>
-        <dt>Value</dt><dd>In-place vs mark-to-market NOI and value at your cap rate</dd>
-      </dl>
-    </div>
-    <div class="buy"><div class="price">$69<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/rent-roll-analyzer" rel="noopener">Buy now ($69)</a><span class="ok">.xlsx · paste your roll in</span></div>
-  </article>
-
-  <article class="card">
-    <div class="main">
-      <h2>Construction Loan Sources &amp; Uses, Draw Schedule &amp; Interest Reserve Model</h2>
-      <div class="for">For developers sizing a construction loan, lenders checking a budget, equity partners reading a takeout.</div>
-      <dl class="spec">
-        <dt>Sizes on</dt><dd>Loan-to-cost vs LTV on completed value · binding constraint flagged</dd>
-        <dt>Schedule</dt><dd>48 months · S-curve draws · equity first · retainage · interest reserve solved without circularity</dd>
-        <dt>Takeout</dt><dd>Permanent loan at LTV / DSCR / debt yield · cash-out or shortfall · development yield</dd>
-        <dt>Example</dt><dd>60 units, $24.7M cost, 65% LTC → $16.05M loan, $1.67M reserve, 7.90% yield on cost</dd>
-      </dl>
-    </div>
-    <div class="buy"><div class="price">$129<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/construction-loan-model-v2" rel="noopener">Buy now ($129)</a><span class="ok">.xlsx · 2,143 live formulas · no macros</span></div>
-  </article>
-  <article class="card">
-    <div class="main">
-      <h2>Bridge-to-Agency Refinance Model (Value-Add Multifamily)</h2>
-      <div class="for">For value-add buyers sizing a bridge loan, and bridge lenders or agency originators testing the takeout.</div>
-      <dl class="spec">
-        <dt>Program</dt><dd>60 months · units renovated per month · downtime · in-place vs renovated rent · T-3 and T-12 NOI</dd>
-        <dt>Bridge</dt><dd>LTC vs as-is LTV sizing · renovation holdback · interest reserve · IO DSCR by month</dd>
-        <dt>Takeout</dt><dd>Agency loan at the lowest of LTV, DSCR and debt yield · cash-out or shortfall · post-refi DSCR</dd>
-        <dt>Returns</dt><dd>Project, LP and GP IRR and multiple · two-tier promote · two live 7×7 stress grids</dd>
-      </dl>
-    </div>
-    <div class="buy"><div class="price">$139<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/bridge-to-agency-refi-model" rel="noopener">Buy now ($139)</a><span class="ok">.xlsx · 7,924 live formulas · no macros</span></div>
-  </article>
-  <article class="card">
-    <div class="main">
-      <h2>Private Credit / Real Estate Debt Fund Model</h2>
-      <div class="for">For fund managers sizing leverage for a raise, LPs and placement agents checking a sponsor's net return claim.</div>
-      <dl class="spec">
-        <dt>Structure</dt><dd>Closed-end · 10 years · subscription line · back leverage · management fee on committed then invested capital</dd>
-        <dt>Waterfall</dt><dd>European, with a true GP catch-up tier · LP net IRR, MOIC, DPI, TVPI by year</dd>
-        <dt>Bridge</dt><dd>Gross asset yield → net of losses → net of leverage → net of fees → net of carry</dd>
-        <dt>Stress</dt><dd>Two live 7×7 grids: LP net IRR and MOIC vs loss rate and advance rate</dd>
-      </dl>
-    </div>
-    <div class="buy"><div class="price">$169<small>single-user licence</small></div><a class="btn" href="https://mcginspark.gumroad.com/l/debt-fund-returns-model" rel="noopener">Buy now ($169)</a><span class="ok">.xlsx · 5,573 live formulas · no macros</span></div>
-  </article>
+    <ul class="trust" aria-label="At a glance">
+      <li><b>7</b><span>templates, debt to equity</span></li>
+      <li><b>100%</b><span>live formulas · no macros, no hidden sheets</span></li>
+      <li><b>0</b><span>errors on independent recalculation</span></li>
+      <li><b>14-day</b><span>refund if a file does not do what its listing says</span></li>
+      <li><b>AI-built</b><span>by an AI system, to a finance professional's specification</span></li>
+    </ul>
+  </div>
 </section>
-
-<section class="guides" id="guides" aria-label="Guides">
-  <h2>Guides</h2>
-  <p class="disc">Plain explanations of the arithmetic behind each template, with worked examples drawn from the templates' own example cases.</p>
-  <ul>
-  <li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a><small>The crossover rate at which a 1.25x DSCR floor overtakes a 70% LTV cap, and what each 25 bps costs in proceeds.</small></li>
-<li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a><small>What each of the three sizing tests protects against, and how they hand off to each other as rates and prices move.</small></li>
-<li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a><small>Computing loss-to-lease from a unit-level roll, and why economic occupancy and expiration concentration decide whether it is real.</small></li>
-<li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a><small>A three-hurdle LP/GP waterfall traced tier by tier through the capital accounts, with the promote and the LP&#x27;s IRR give-up.</small></li>
-<li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a><small>Break-even occupancy on the amortizing payment, two stress grids, and the cell where DSCR falls below 1.0x.</small></li>
-<li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a><small>Why DSCR is sized on the amortizing payment during an IO period, the leverage the IO convention would add, and the balloon it leaves.</small></li>
-  </ul>
+<section class="block" id="products" aria-labelledby="products-h">
+  <div class="container">
+    <header class="sec-head">
+      <div class="eyebrow">§ 01 · Templates</div>
+      <h2 id="products-h">Seven workbooks, every sheet shown</h2>
+      <p>Click through each model's sheets below. Every screenshot is the template's own example case, recalculated; the figures in the ledgers are read from the same files.</p>
+    </header>
+    <nav class="toc" aria-label="Template index"><ol><li><a href="#dscr"><span class="n">01</span><span class="nm">DSCR Debt Sizing</span><span class="lead" aria-hidden="true"></span><span class="cat">Debt sizing</span><span class="pr">$79</span></a></li><li><a href="#waterfall"><span class="n">02</span><span class="nm">Equity Waterfall</span><span class="lead" aria-hidden="true"></span><span class="cat">Equity structures</span><span class="pr">$89</span></a></li><li><a href="#rentroll"><span class="n">03</span><span class="nm">Rent Roll Analyzer</span><span class="lead" aria-hidden="true"></span><span class="cat">Rent roll analysis</span><span class="pr">$69</span></a></li><li><a href="#construction"><span class="n">04</span><span class="nm">Construction Loan</span><span class="lead" aria-hidden="true"></span><span class="cat">Development</span><span class="pr">$129</span></a></li><li><a href="#debtfund"><span class="n">05</span><span class="nm">Debt Fund Model</span><span class="lead" aria-hidden="true"></span><span class="cat">Fund returns</span><span class="pr">$169</span></a></li><li><a href="#bridge"><span class="n">06</span><span class="nm">Bridge-to-Agency Refi</span><span class="lead" aria-hidden="true"></span><span class="cat">Value-add</span><span class="pr">$139</span></a></li><li><a href="#storage"><span class="n">07</span><span class="nm">Self-Storage Lease-Up</span><span class="lead" aria-hidden="true"></span><span class="cat">Self-storage</span><span class="pr">$119</span></a></li></ol></nav>
+    <section class="product" id="dscr" aria-labelledby="dscr-h">
+  <div class="p-head">
+    <span class="pn">01</span>
+    <span class="cat">Debt sizing</span>
+    <h3 id="dscr-h">DSCR Debt Sizing &amp; Loan Underwriting Model</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="dscr" data-idx="0">
+      <div class="stage" id="dscr-stage" role="tabpanel" aria-labelledby="dscr-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Dashboard sheet">
+          <img src="/img/dscr-1-dashboard.webp" width="1226" height="699" alt="DSCR Debt Sizing &amp; Loan Underwriting Model: Dashboard sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 6 · <b>Dashboard</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="DSCR Debt Sizing &amp; Loan Underwriting Model sheets"><button type="button" class="tab" role="tab" id="dscr-t0" aria-controls="dscr-stage" aria-selected="true" tabindex="0"><img src="/img/t/dscr-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Dashboard</span></button><button type="button" class="tab" role="tab" id="dscr-t1" aria-controls="dscr-stage" aria-selected="false" tabindex="-1"><img src="/img/t/dscr-2-debt-sizing.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Debt Sizing</span></button><button type="button" class="tab" role="tab" id="dscr-t2" aria-controls="dscr-stage" aria-selected="false" tabindex="-1"><img src="/img/t/dscr-3-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="dscr-t3" aria-controls="dscr-stage" aria-selected="false" tabindex="-1"><img src="/img/t/dscr-4-noi-build.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>NOI Build</span></button><button type="button" class="tab" role="tab" id="dscr-t4" aria-controls="dscr-stage" aria-selected="false" tabindex="-1"><img src="/img/t/dscr-5-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button><button type="button" class="tab" role="tab" id="dscr-t5" aria-controls="dscr-stage" aria-selected="false" tabindex="-1"><img src="/img/t/dscr-6-amortization.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Amortization</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">Size the maximum loan on a stabilized property under LTV, DSCR and debt yield, see which constraint binds, and stress it against rate and NOI.</p>
+      <p class="for"><b>For:</b> Buyers of stabilized multifamily, storage, retail and industrial; mortgage brokers packaging a request.</p>
+      <dl class="spec"><dt>Sizes on</dt><dd>LTV · DSCR on the amortizing payment · debt yield · binding constraint flagged</dd><dt>Schedule</dt><dd>360 months, interest-only period honoured</dd><dt>Stress</dt><dd>Two 7×7 grids: maximum loan and DSCR against rate and NOI</dd><dt>Dashboard</dt><dd>Max loan at +50 bps and at −10% NOI, break-even occupancy, cash-on-cash</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">48 units · $6.4M price · $382,764 NOI · 6.75% / 30-yr · 70% LTV / 1.25x / 8.5% DY</p>
+        <dl class="ledger"><div class="hl"><dt>Maximum loan</dt><dd>$3,934,000</dd></div><div><dt>Binding constraint</dt><dd>DSCR</dd></div><div><dt>LTV / debt yield</dt><dd>61.5% / 9.73%</dd></div><div><dt>DSCR amortizing / interest-only</dt><dd>1.25x / 1.44x</dd></div><div><dt>Break-even occupancy</dt><dd>83.8%</dd></div><div><dt>Max loan if rate +50 bps</dt><dd>$3,740,000</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>79</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · Excel 2016+ and LibreOffice · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/dscr-debt-sizing-model" rel="noopener">Buy on Gumroad<span class="vh">: DSCR Debt Sizing &amp; Loan Underwriting Model, $79</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (DSCR Debt Sizing)</span></a>
+        </div>
+      </div>
+      <p class="related">Worked example: <a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a> · <a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></p>
+    </div>
+  </div>
+</section><section class="product" id="waterfall" aria-labelledby="waterfall-h">
+  <div class="p-head">
+    <span class="pn">02</span>
+    <span class="cat">Equity structures</span>
+    <h3 id="waterfall-h">Equity Waterfall Model (IRR Hurdles &amp; Promote)</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="waterfall" data-idx="0">
+      <div class="stage" id="waterfall-stage" role="tabpanel" aria-labelledby="waterfall-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Returns sheet">
+          <img src="/img/waterfall-1-returns.webp" width="1594" height="802" alt="Equity Waterfall Model (IRR Hurdles &amp; Promote): Returns sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 5 · <b>Returns</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Equity Waterfall Model (IRR Hurdles &amp; Promote) sheets"><button type="button" class="tab" role="tab" id="waterfall-t0" aria-controls="waterfall-stage" aria-selected="true" tabindex="0"><img src="/img/t/waterfall-1-returns.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Returns</span></button><button type="button" class="tab" role="tab" id="waterfall-t1" aria-controls="waterfall-stage" aria-selected="false" tabindex="-1"><img src="/img/t/waterfall-2-waterfall.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Waterfall</span></button><button type="button" class="tab" role="tab" id="waterfall-t2" aria-controls="waterfall-stage" aria-selected="false" tabindex="-1"><img src="/img/t/waterfall-3-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button><button type="button" class="tab" role="tab" id="waterfall-t3" aria-controls="waterfall-stage" aria-selected="false" tabindex="-1"><img src="/img/t/waterfall-4-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="waterfall-t4" aria-controls="waterfall-stage" aria-selected="false" tabindex="-1"><img src="/img/t/waterfall-5-readme.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>README</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">LP/GP distribution waterfall with up to four IRR hurdle tiers, a hypothetical capital account shown for every tier, and returns and promote by party.</p>
+      <p class="for"><b>For:</b> Sponsors building an offering, LPs checking a deck, analysts explaining a promote to a committee.</p>
+      <dl class="spec"><dt>Structure</dt><dd>Up to 4 tiers · IRR hurdles · LP/GP split per tier · residual</dd><dt>Method</dt><dd>European whole-fund IRR lookback; capital account per tier, year by year</dd><dt>Outputs</dt><dd>IRR, MOIC and profit by party · promote dollars · LP IRR give-up</dd><dt>Checks</dt><dd>4 reconciliations that must read zero or OK · 7-scenario exit sensitivity</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">$3.0M equity · 90/10 LP/GP · 8% pref, 80/20 to 12%, 70/30 to 15%, 60/40 above · 10-yr hold</p>
+        <dl class="ledger"><div><dt>Project IRR / MOIC</dt><dd>13.09% / 2.835x</dd></div><div><dt>LP IRR / MOIC</dt><dd>12.51% / 2.70x</dd></div><div><dt>GP IRR / MOIC</dt><dd>17.34% / 4.08x</dd></div><div class="hl"><dt>Promote earned by GP</dt><dd>$372,152</dd></div><div><dt>Promote share of profit</dt><dd>6.76%</dd></div><div><dt>LP IRR give-up to promote</dt><dd>58 bps</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>89</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · annual periods · 10 years · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/equity-waterfall-model" rel="noopener">Buy on Gumroad<span class="vh">: Equity Waterfall Model (IRR Hurdles &amp; Promote), $89</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Equity Waterfall)</span></a>
+        </div>
+      </div>
+      <p class="related">Worked example: <a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></p>
+    </div>
+  </div>
+</section><section class="product" id="rentroll" aria-labelledby="rentroll-h">
+  <div class="p-head">
+    <span class="pn">03</span>
+    <span class="cat">Rent roll analysis</span>
+    <h3 id="rentroll-h">Multifamily Rent Roll Analyzer</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="rentroll" data-idx="0">
+      <div class="stage" id="rentroll-stage" role="tabpanel" aria-labelledby="rentroll-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Analysis sheet">
+          <img src="/img/rentroll-1-analysis.webp" width="1349" height="1120" alt="Multifamily Rent Roll Analyzer: Analysis sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 5 · <b>Analysis</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Multifamily Rent Roll Analyzer sheets"><button type="button" class="tab" role="tab" id="rentroll-t0" aria-controls="rentroll-stage" aria-selected="true" tabindex="0"><img src="/img/t/rentroll-1-analysis.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Analysis</span></button><button type="button" class="tab" role="tab" id="rentroll-t1" aria-controls="rentroll-stage" aria-selected="false" tabindex="-1"><img src="/img/t/rentroll-2-rent-roll.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Rent Roll</span></button><button type="button" class="tab" role="tab" id="rentroll-t2" aria-controls="rentroll-stage" aria-selected="false" tabindex="-1"><img src="/img/t/rentroll-3-expirations.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Expirations</span></button><button type="button" class="tab" role="tab" id="rentroll-t3" aria-controls="rentroll-stage" aria-selected="false" tabindex="-1"><img src="/img/t/rentroll-4-unit-mix.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Unit Mix</span></button><button type="button" class="tab" role="tab" id="rentroll-t4" aria-controls="rentroll-stage" aria-selected="false" tabindex="-1"><img src="/img/t/rentroll-5-readme.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>README</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">Paste a unit-level rent roll and get loss-to-lease, physical and economic occupancy, lease-expiration exposure, and in-place versus mark-to-market NOI and value.</p>
+      <p class="for"><b>For:</b> Anyone buying, refinancing or asset-managing 10 to 150 units.</p>
+      <dl class="spec"><dt>Capacity</dt><dd>150 units · 5 unit types · Occupied / Vacant / Notice / Model / Down</dd><dt>Computes</dt><dd>Per-unit loss-to-lease · physical and economic occupancy · rent per SF</dd><dt>Rollover</dt><dd>Units and rent at risk by bucket · six-month concentration</dd><dt>Value</dt><dd>In-place vs mark-to-market NOI and value at your cap rate</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">48 units · 5 unit types · analysis date 1 Oct 2026 · 6.25% cap rate</p>
+        <dl class="ledger"><div><dt>Physical / economic occupancy</dt><dd>91.7% / 82.7%</dd></div><div class="hl"><dt>Loss-to-lease</dt><dd>$7,255 / mo</dd></div><div><dt>Loss-to-lease, % of in-place</dt><dd>10.7%</dd></div><div><dt>Units rolling within 6 months</dt><dd>24 (50%)</dd></div><div><dt>NOI in-place / mark-to-market</dt><dd>$464,939 / $549,387</dd></div><div><dt>Value creation at 6.25% cap</dt><dd>$1,351,171</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>69</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · paste your roll in · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/rent-roll-analyzer" rel="noopener">Buy on Gumroad<span class="vh">: Multifamily Rent Roll Analyzer, $69</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Rent Roll Analyzer)</span></a>
+        </div>
+      </div>
+      <p class="related">Worked example: <a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></p>
+    </div>
+  </div>
+</section><section class="product" id="construction" aria-labelledby="construction-h">
+  <div class="p-head">
+    <span class="pn">04</span>
+    <span class="cat">Development</span>
+    <h3 id="construction-h">Construction Loan Model: Sources &amp; Uses, Draw Schedule &amp; Interest Reserve</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="construction" data-idx="0">
+      <div class="stage" id="construction-stage" role="tabpanel" aria-labelledby="construction-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Dashboard sheet">
+          <img src="/img/construction-1-dashboard.webp" width="1299" height="1124" alt="Construction Loan Model: Sources &amp; Uses, Draw Schedule &amp; Interest Reserve: Dashboard sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 6 · <b>Dashboard</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Construction Loan Model: Sources &amp; Uses, Draw Schedule &amp; Interest Reserve sheets"><button type="button" class="tab" role="tab" id="construction-t0" aria-controls="construction-stage" aria-selected="true" tabindex="0"><img src="/img/t/construction-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Dashboard</span></button><button type="button" class="tab" role="tab" id="construction-t1" aria-controls="construction-stage" aria-selected="false" tabindex="-1"><img src="/img/t/construction-2-sources-uses.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sources &amp; Uses</span></button><button type="button" class="tab" role="tab" id="construction-t2" aria-controls="construction-stage" aria-selected="false" tabindex="-1"><img src="/img/t/construction-3-draw-schedule.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Draw Schedule</span></button><button type="button" class="tab" role="tab" id="construction-t3" aria-controls="construction-stage" aria-selected="false" tabindex="-1"><img src="/img/t/construction-4-takeout.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Takeout</span></button><button type="button" class="tab" role="tab" id="construction-t4" aria-controls="construction-stage" aria-selected="false" tabindex="-1"><img src="/img/t/construction-5-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="construction-t5" aria-controls="construction-stage" aria-selected="false" tabindex="-1"><img src="/img/t/construction-6-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">Draws the budget on an S-curve with retainage, funds equity first, sizes the loan at the lower of LTC and LTV, solves the interest reserve without circular references, then tests the permanent-loan takeout.</p>
+      <p class="for"><b>For:</b> Developers sizing a construction loan, lenders checking a budget and reserve, equity partners reading the takeout.</p>
+      <dl class="spec"><dt>Sizes on</dt><dd>Loan-to-cost vs LTV on completed value · binding constraint flagged</dd><dt>Schedule</dt><dd>48 months · S-curve draws · equity first · retainage · reserve solved without circularity</dd><dt>Takeout</dt><dd>Permanent loan at LTV / DSCR / debt yield · cash-out or shortfall · development yield</dd><dt>Checks</dt><dd>11 checks roll into one status cell · two live 7×7 grids</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">60 units · $24.7M total cost · 22-month build + 8-month lease-up · 65% LTC · 8.25% all-in</p>
+        <dl class="ledger"><div class="hl"><dt>Loan commitment (LTC binds)</dt><dd>$16.05M</dd></div><div><dt>Capitalized interest reserve</dt><dd>$1.67M</dd></div><div><dt>Equity, funded first</dt><dd>$8.64M</dd></div><div><dt>Development yield vs 5.75% exit cap</dt><dd>7.90% (+215 bps)</dd></div><div><dt>Permanent loan (DSCR binds)</dt><dd>$20.57M</dd></div><div><dt>Refinance cash-out</dt><dd>$4.41M</dd></div><div><dt>Equity multiple at stabilization</dt><dd>2.07x</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>129</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · 2,143 live formulas · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/construction-loan-model-v2" rel="noopener">Buy on Gumroad<span class="vh">: Construction Loan Model: Sources &amp; Uses, Draw Schedule &amp; Interest Reserve, $129</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Construction Loan)</span></a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section><section class="product" id="debtfund" aria-labelledby="debtfund-h">
+  <div class="p-head">
+    <span class="pn">05</span>
+    <span class="cat">Fund returns</span>
+    <h3 id="debtfund-h">Private Credit / Real Estate Debt Fund Model</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="debtfund" data-idx="0">
+      <div class="stage" id="debtfund-stage" role="tabpanel" aria-labelledby="debtfund-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Dashboard sheet">
+          <img src="/img/debtfund-1-dashboard.webp" width="1597" height="947" alt="Private Credit / Real Estate Debt Fund Model: Dashboard sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 6 · <b>Dashboard</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Private Credit / Real Estate Debt Fund Model sheets"><button type="button" class="tab" role="tab" id="debtfund-t0" aria-controls="debtfund-stage" aria-selected="true" tabindex="0"><img src="/img/t/debtfund-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Dashboard</span></button><button type="button" class="tab" role="tab" id="debtfund-t1" aria-controls="debtfund-stage" aria-selected="false" tabindex="-1"><img src="/img/t/debtfund-2-returns.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Returns</span></button><button type="button" class="tab" role="tab" id="debtfund-t2" aria-controls="debtfund-stage" aria-selected="false" tabindex="-1"><img src="/img/t/debtfund-3-fund-model.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Fund Model</span></button><button type="button" class="tab" role="tab" id="debtfund-t3" aria-controls="debtfund-stage" aria-selected="false" tabindex="-1"><img src="/img/t/debtfund-4-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="debtfund-t4" aria-controls="debtfund-stage" aria-selected="false" tabindex="-1"><img src="/img/t/debtfund-5-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button><button type="button" class="tab" role="tab" id="debtfund-t5" aria-controls="debtfund-stage" aria-selected="false" tabindex="-1"><img src="/img/t/debtfund-6-readme.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>README</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">Ten-year closed-end debt fund: deployment, credit losses, subscription line and back leverage, fees, and a European waterfall with a true GP catch-up, reported the way an LP reads it.</p>
+      <p class="for"><b>For:</b> Fund managers sizing leverage for a raise; LPs, consultants and placement agents checking a sponsor&#x27;s net return claim.</p>
+      <dl class="spec"><dt>Structure</dt><dd>Closed-end · 10 years · subscription line · back leverage · fee on committed, then invested</dd><dt>Waterfall</dt><dd>European, with a true GP catch-up tier · LP net IRR, MOIC, DPI, TVPI by year</dd><dt>Bridge</dt><dd>Gross yield → net of losses → net of leverage → net of fees → net of carry</dd><dt>Stress</dt><dd>Two live 7×7 grids: LP net IRR and MOIC vs loss rate and advance rate</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">$250M committed · 3-yr investment period · 8-yr term · 8% pref / 20% carry with catch-up</p>
+        <dl class="ledger"><div><dt>Gross portfolio yield</dt><dd>11.50%</dd></div><div><dt>Net of credit losses</dt><dd>10.45%</dd></div><div class="hl"><dt>LP net IRR</dt><dd>10.84%</dd></div><div><dt>LP net MOIC</dt><dd>1.40x</dd></div><div><dt>LP DPI reaches 1.0x</dt><dd>Year 6</dd></div><div><dt>GP carried interest</dt><dd>$18.19M</dd></div><div><dt>LP IRR give-up to carry</dt><dd>176 bps</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>169</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · 5,573 live formulas · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/debt-fund-returns-model" rel="noopener">Buy on Gumroad<span class="vh">: Private Credit / Real Estate Debt Fund Model, $169</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Debt Fund Model)</span></a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section><section class="product" id="bridge" aria-labelledby="bridge-h">
+  <div class="p-head">
+    <span class="pn">06</span>
+    <span class="cat">Value-add</span>
+    <h3 id="bridge-h">Bridge-to-Agency Refinance Model (Value-Add Multifamily)</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="bridge" data-idx="0">
+      <div class="stage" id="bridge-stage" role="tabpanel" aria-labelledby="bridge-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Dashboard sheet">
+          <img src="/img/bridge-1-dashboard.webp" width="1159" height="1122" alt="Bridge-to-Agency Refinance Model (Value-Add Multifamily): Dashboard sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 7 · <b>Dashboard</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Bridge-to-Agency Refinance Model (Value-Add Multifamily) sheets"><button type="button" class="tab" role="tab" id="bridge-t0" aria-controls="bridge-stage" aria-selected="true" tabindex="0"><img src="/img/t/bridge-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Dashboard</span></button><button type="button" class="tab" role="tab" id="bridge-t1" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-2-agency-takeout.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Agency Takeout</span></button><button type="button" class="tab" role="tab" id="bridge-t2" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-3-returns.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Returns</span></button><button type="button" class="tab" role="tab" id="bridge-t3" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-4-renovation.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Renovation</span></button><button type="button" class="tab" role="tab" id="bridge-t4" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-5-bridge-loan.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Bridge Loan</span></button><button type="button" class="tab" role="tab" id="bridge-t5" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-6-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="bridge-t6" aria-controls="bridge-stage" aria-selected="false" tabindex="-1"><img src="/img/t/bridge-7-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">Sizes the bridge loan on purchase plus renovation, rolls units to market rent month by month, and tests whether the agency takeout repays the bridge with cash out, then carries the deal to sale.</p>
+      <p class="for"><b>For:</b> Value-add buyers sizing a bridge loan; bridge lenders and agency originators testing the takeout.</p>
+      <dl class="spec"><dt>Program</dt><dd>60 months · units renovated per month · downtime · T-3 and T-12 NOI</dd><dt>Bridge</dt><dd>LTC vs as-is LTV · renovation holdback · interest reserve · IO DSCR by month</dd><dt>Takeout</dt><dd>Agency loan at the lowest of LTV, DSCR and debt yield · cash-out or shortfall</dd><dt>Returns</dt><dd>Project, LP and GP IRR and multiple · two-tier promote · two live 7×7 grids</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">120 units · $18.0M purchase · $1,250 → $1,575 rent · $12,500/unit renovation · 75% LTC at 8.75% IO</p>
+        <dl class="ledger"><div><dt>Bridge commitment (LTC binds)</dt><dd>$14.63M</dd></div><div><dt>Initial advance / holdback</dt><dd>$13.13M / $1.50M</dd></div><div><dt>In-place DSCR at closing</dt><dd>0.82x</dd></div><div class="hl"><dt>Agency loan, month 26 (DSCR binds)</dt><dd>$15.77M</dd></div><div><dt>Refinance cash-out</dt><dd>$914K (15% of equity)</dd></div><div><dt>Project IRR / multiple</dt><dd>20.2% / 2.23x</dd></div><div><dt>LP / GP IRR</dt><dd>18.2% / 34.1%</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>139</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · 7,924 live formulas · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/bridge-to-agency-refi-model" rel="noopener">Buy on Gumroad<span class="vh">: Bridge-to-Agency Refinance Model (Value-Add Multifamily), $139</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Bridge-to-Agency Refi)</span></a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section><section class="product" id="storage" aria-labelledby="storage-h">
+  <div class="p-head">
+    <span class="pn">07</span>
+    <span class="cat">Self-storage</span>
+    <h3 id="storage-h">Self-Storage Acquisition &amp; Lease-Up Underwriting Model</h3>
+  </div>
+  <div class="p-grid">
+    <div class="gallery" data-gallery="storage" data-idx="0">
+      <div class="stage" id="storage-stage" role="tabpanel" aria-labelledby="storage-t0">
+        <button type="button" class="stage-btn" aria-label="Enlarge Dashboard sheet">
+          <img src="/img/storage-1-dashboard.webp" width="1178" height="1130" alt="Self-Storage Acquisition &amp; Lease-Up Underwriting Model: Dashboard sheet, example case" loading="lazy" decoding="async">
+        </button>
+        <div class="stage-cap"><span>Sheet <span class="n num">1</span> of 7 · <b>Dashboard</b></span><span class="hint">Click to enlarge</span></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Self-Storage Acquisition &amp; Lease-Up Underwriting Model sheets"><button type="button" class="tab" role="tab" id="storage-t0" aria-controls="storage-stage" aria-selected="true" tabindex="0"><img src="/img/t/storage-1-dashboard.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Dashboard</span></button><button type="button" class="tab" role="tab" id="storage-t1" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-2-lease-up.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Lease-Up</span></button><button type="button" class="tab" role="tab" id="storage-t2" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-3-debt.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Debt</span></button><button type="button" class="tab" role="tab" id="storage-t3" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-4-returns.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Returns</span></button><button type="button" class="tab" role="tab" id="storage-t4" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-5-unit-mix.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Unit Mix</span></button><button type="button" class="tab" role="tab" id="storage-t5" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-6-sensitivity.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Sensitivity</span></button><button type="button" class="tab" role="tab" id="storage-t6" aria-controls="storage-stage" aria-selected="false" tabindex="-1"><img src="/img/t/storage-7-inputs.webp" width="320" height="200" alt="" loading="lazy" decoding="async"><span>Inputs</span></button></div>
+    </div>
+    <div class="p-info">
+      <p class="lede">A ten-year monthly self-storage model: eight-type unit mix, month-by-month absorption to stabilized occupancy, ECRI step-ups toward street rate, a loan sized at the lowest of LTV, DSCR and debt yield, and LP/GP returns.</p>
+      <p class="for"><b>For:</b> Storage buyers underwriting a lease-up or value-add facility; lenders and LPs testing the absorption and the exit.</p>
+      <dl class="spec"><dt>Unit mix</dt><dd>8 unit types · climate-controlled premium · street vs in-place rate · loss-to-lease</dd><dt>Lease-up</dt><dd>132 monthly rows · net absorption · ECRI step-ups capped at street · trailing-12 NOI</dd><dt>Debt</dt><dd>MIN(LTV, DSCR on stabilized NOI, debt yield) · IO then amortizing · DSCR by month</dd><dt>Returns</dt><dd>Unlevered and levered IRR · yield on cost · break-even occupancy · two-tier promote · two 7×7 grids</dd></dl>
+      <div class="excase">
+        <div class="cap">Example case output</div>
+        <p class="assume">520 units · 66,250 NRSF · $9.6M purchase · 62% → 88% occupancy at 9 units/month · 62% LTV at 6.60%</p>
+        <dl class="ledger"><div><dt>Stabilization</dt><dd>Month 16</dd></div><div><dt>Loan (LTV binds)</dt><dd>$5.95M</dd></div><div><dt>Equity</dt><dd>$4.20M</dd></div><div><dt>Going-in cap / yield on cost</dt><dd>3.72% / 6.87%</dd></div><div><dt>Break-even occupancy</dt><dd>67.7%</dd></div><div class="hl"><dt>Levered IRR / multiple</dt><dd>15.5% / 2.45x</dd></div><div><dt>LP / GP IRR</dt><dd>14.1% / 24.9%</dd></div></dl>
+      </div>
+      <div class="buy">
+        <div class="price"><span class="cur">$</span>119</div>
+        <div class="buy-meta">One-time purchase · single-user licence<br>.xlsx · Excel 2016+ and LibreOffice · no macros</div>
+        <div class="actions">
+          <a class="btn" href="https://mcginspark.gumroad.com/l/self-storage-underwriting-model" rel="noopener">Buy on Gumroad<span class="vh">: Self-Storage Acquisition &amp; Lease-Up Underwriting Model, $119</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="alt" href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">Also on eFinancialModels<span class="vh"> (Self-Storage Lease-Up)</span></a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 </section>
-
-<section class="faq" id="faq" aria-label="Questions">
-  <div><h3>Where do I buy?</h3><p>All templates are sold through the Lender Ready Models vendor store on eFinancialModels.com, which handles payment, delivery and licensing.</p></div>
-  <div><h3>Who built these?</h3><p>An AI system did the modelling, under a standing instruction set from a finance professional, and recalculates every file with an independent engine before release. Questions sent to the support inbox are answered by the same system; anything it cannot resolve is escalated to a person.</p></div>
-  <div><h3>Can I edit the formulas?</h3><p>Yes. Nothing is locked or hidden. Inputs are blue text; formulas are black; cross-sheet links are green.</p></div>
-  <div><h3>Refunds?</h3><p>Refunds are governed by the marketplace's policy. If a workbook does not do what its listing says, contact the store through eFinancialModels and it will be made right.</p></div>
+  </div>
 </section>
+<section class="block" id="calc" aria-labelledby="calc-h">
+  <div class="container">
+    <header class="sec-head">
+      <div class="eyebrow">§ 02 · Try the arithmetic</div>
+      <h2 id="calc-h">Run the first page of the underwriting yourself</h2>
+      <p>Two small calculators that do, in simplified form, what the templates do in full. Defaults are the templates' own example cases, so the numbers tie to the screenshots above.</p>
+    </header>
 
-<footer>
-  <div>Built and tested by an AI system; modelling tools, not financial, investment, lending or legal advice.</div>
-  <div>Lender Ready Models · Templates sold on <a href="https://mcginspark.gumroad.com" rel="noopener">Gumroad</a> and <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>. Example figures on this site come from the templates' own example cases and are illustrative only.</div>
-</footer>
+    <div class="calc" id="sizer-card">
+      <div class="calc-head"><h3>Loan sizer: LTV vs DSCR vs debt yield</h3><span class="note">Simplified. The template adds IO periods, rounding rules, sources and uses, and 7×7 stress grids.</span></div>
+      <form class="calc-body" id="sizer" novalidate onsubmit="return false">
+        <div class="calc-in"><div class="field"><label for="f-noi">Net operating income (annual)</label><div class="inp"><span class="u" aria-hidden="true">$</span><input id="f-noi" name="noi" type="number" inputmode="decimal" step="any" min="0" value="382763.52" data-default="382763.52"></div></div><div class="field"><label for="f-price">Purchase price or value</label><div class="inp"><span class="u" aria-hidden="true">$</span><input id="f-price" name="price" type="number" inputmode="decimal" step="any" min="0" value="6400000" data-default="6400000"></div></div><div class="field"><label for="f-rate">Interest rate</label><div class="inp"><input id="f-rate" name="rate" type="number" inputmode="decimal" step="any" min="0" value="6.75" data-default="6.75"><span class="u" aria-hidden="true">%</span></div></div><div class="field"><label for="f-amort">Amortization</label><div class="inp"><input id="f-amort" name="amort" type="number" inputmode="decimal" step="any" min="0" value="30" data-default="30"><span class="u" aria-hidden="true">yrs</span></div></div><div class="field"><label for="f-ltv">Maximum LTV</label><div class="inp"><input id="f-ltv" name="ltv" type="number" inputmode="decimal" step="any" min="0" value="70" data-default="70"><span class="u" aria-hidden="true">%</span></div></div><div class="field"><label for="f-dscr">Minimum DSCR</label><div class="inp"><input id="f-dscr" name="dscr" type="number" inputmode="decimal" step="any" min="0" value="1.25" data-default="1.25"><span class="u" aria-hidden="true">x</span></div></div><div class="field"><label for="f-dy">Minimum debt yield</label><div class="inp"><input id="f-dy" name="dy" type="number" inputmode="decimal" step="any" min="0" value="8.5" data-default="8.5"><span class="u" aria-hidden="true">%</span></div></div><button type="button" class="reset" data-reset="sizer">Reset to example case</button></div>
+        <div class="calc-out">
+          <div class="headline" aria-live="polite" aria-atomic="true">
+            <span class="k">Maximum loan, rounded down to $1,000</span>
+            <span class="v" id="o-loan">$3,934,000</span>
+            <span class="s" id="o-bind"><b>DSCR</b> is the binding constraint.</span>
+          </div>
+          <ul class="bars" id="o-bars">
+            <li data-k="ltv"><span class="lab">Loan-to-value cap</span><span class="val">$4,480,000</span><span class="track"><span class="fill" style="width:99.5%"></span></span></li>
+            <li data-k="dscr" class="bind"><span class="lab">DSCR on amortizing payment</span><span class="val">$3,934,265</span><span class="track"><span class="fill" style="width:87.4%"></span></span></li>
+            <li data-k="dy"><span class="lab">Debt yield floor</span><span class="val">$4,503,100</span><span class="track"><span class="fill" style="width:100%"></span></span></li>
+          </ul>
+          <dl class="kv">
+            <div><dt>Implied LTV</dt><dd id="o-ltv">61.5%</dd></div>
+            <div><dt>DSCR on the loan</dt><dd id="o-dscr">1.25x</dd></div>
+            <div><dt>Debt yield on the loan</dt><dd id="o-dy">9.73%</dd></div>
+            <div><dt>Loan constant</dt><dd id="o-k">7.78%</dd></div>
+          </dl>
+        </div>
+      </form>
+      <div class="calc-foot"><span>DSCR loan = NOI ÷ (min DSCR × annual loan constant). Debt yield loan = NOI ÷ min debt yield. LTV loan = value × max LTV.</span><a href="#dscr">The full DSCR template, $79</a></div>
+    </div>
+
+    <div class="calc" id="ltl-card">
+      <div class="calc-head"><h3>Loss-to-lease and mark-to-market value</h3><span class="note">Simplified. The template works unit by unit, with statuses, expirations and a full pro forma.</span></div>
+      <form class="calc-body wide-in" id="ltl" novalidate onsubmit="return false">
+        <div class="ltl-in">
+          <div class="ltl-cols" aria-hidden="true"><span>Type</span><span>Units</span><span>Occupied</span><span>In-place rent, occupied ($/mo total)</span><span>Market rent ($/unit/mo)</span></div>
+          <div class="ltl-row" role="group" aria-labelledby="r0n" data-row="0"><span class="legend" id="r0n">Studio</span>
+  <div class="field"><label for="r0u">Units</label><div class="inp"><input id="r0u" type="number" inputmode="numeric" min="0" step="1" value="6" data-default="6" data-k="u"></div></div>
+  <div class="field"><label for="r0o">Occupied</label><div class="inp"><input id="r0o" type="number" inputmode="numeric" min="0" step="1" value="5" data-default="5" data-k="o"></div></div>
+  <div class="field"><label for="r0i">In-place rent, occupied, $/mo total</label><div class="inp"><input id="r0i" type="number" inputmode="decimal" min="0" step="any" value="5560" data-default="5560" data-k="i"></div></div>
+  <div class="field"><label for="r0m">Market rent, $/unit/mo</label><div class="inp"><input id="r0m" type="number" inputmode="decimal" min="0" step="any" value="1250" data-default="1250" data-k="m"></div></div>
+</div><div class="ltl-row" role="group" aria-labelledby="r1n" data-row="1"><span class="legend" id="r1n">1BR/1BA</span>
+  <div class="field"><label for="r1u">Units</label><div class="inp"><input id="r1u" type="number" inputmode="numeric" min="0" step="1" value="16" data-default="16" data-k="u"></div></div>
+  <div class="field"><label for="r1o">Occupied</label><div class="inp"><input id="r1o" type="number" inputmode="numeric" min="0" step="1" value="16" data-default="16" data-k="o"></div></div>
+  <div class="field"><label for="r1i">In-place rent, occupied, $/mo total</label><div class="inp"><input id="r1i" type="number" inputmode="decimal" min="0" step="any" value="22155" data-default="22155" data-k="i"></div></div>
+  <div class="field"><label for="r1m">Market rent, $/unit/mo</label><div class="inp"><input id="r1m" type="number" inputmode="decimal" min="0" step="any" value="1525" data-default="1525" data-k="m"></div></div>
+</div><div class="ltl-row" role="group" aria-labelledby="r2n" data-row="2"><span class="legend" id="r2n">2BR/1BA</span>
+  <div class="field"><label for="r2u">Units</label><div class="inp"><input id="r2u" type="number" inputmode="numeric" min="0" step="1" value="10" data-default="10" data-k="u"></div></div>
+  <div class="field"><label for="r2o">Occupied</label><div class="inp"><input id="r2o" type="number" inputmode="numeric" min="0" step="1" value="9" data-default="9" data-k="o"></div></div>
+  <div class="field"><label for="r2i">In-place rent, occupied, $/mo total</label><div class="inp"><input id="r2i" type="number" inputmode="decimal" min="0" step="any" value="14540" data-default="14540" data-k="i"></div></div>
+  <div class="field"><label for="r2m">Market rent, $/unit/mo</label><div class="inp"><input id="r2m" type="number" inputmode="decimal" min="0" step="any" value="1795" data-default="1795" data-k="m"></div></div>
+</div><div class="ltl-row" role="group" aria-labelledby="r3n" data-row="3"><span class="legend" id="r3n">2BR/2BA</span>
+  <div class="field"><label for="r3u">Units</label><div class="inp"><input id="r3u" type="number" inputmode="numeric" min="0" step="1" value="12" data-default="12" data-k="u"></div></div>
+  <div class="field"><label for="r3o">Occupied</label><div class="inp"><input id="r3o" type="number" inputmode="numeric" min="0" step="1" value="10" data-default="10" data-k="o"></div></div>
+  <div class="field"><label for="r3i">In-place rent, occupied, $/mo total</label><div class="inp"><input id="r3i" type="number" inputmode="decimal" min="0" step="any" value="17340" data-default="17340" data-k="i"></div></div>
+  <div class="field"><label for="r3m">Market rent, $/unit/mo</label><div class="inp"><input id="r3m" type="number" inputmode="decimal" min="0" step="any" value="1925" data-default="1925" data-k="m"></div></div>
+</div><div class="ltl-row" role="group" aria-labelledby="r4n" data-row="4"><span class="legend" id="r4n">3BR/2BA</span>
+  <div class="field"><label for="r4u">Units</label><div class="inp"><input id="r4u" type="number" inputmode="numeric" min="0" step="1" value="4" data-default="4" data-k="u"></div></div>
+  <div class="field"><label for="r4o">Occupied</label><div class="inp"><input id="r4o" type="number" inputmode="numeric" min="0" step="1" value="4" data-default="4" data-k="o"></div></div>
+  <div class="field"><label for="r4i">In-place rent, occupied, $/mo total</label><div class="inp"><input id="r4i" type="number" inputmode="decimal" min="0" step="any" value="8205" data-default="8205" data-k="i"></div></div>
+  <div class="field"><label for="r4m">Market rent, $/unit/mo</label><div class="inp"><input id="r4m" type="number" inputmode="decimal" min="0" step="any" value="2250" data-default="2250" data-k="m"></div></div>
 </div>
+          <div class="settings">
+            <div class="field"><label for="f-fee">Management fee, % of income</label><div class="inp"><input id="f-fee" name="fee" type="number" inputmode="decimal" step="any" min="0" value="3" data-default="3"><span class="u" aria-hidden="true">%</span></div></div>
+            <div class="field"><label for="f-cap">Cap rate for value</label><div class="inp"><input id="f-cap" name="cap" type="number" inputmode="decimal" step="any" min="0" value="6.25" data-default="6.25"><span class="u" aria-hidden="true">%</span></div></div>
+          </div>
+          <p class="warn" id="ltl-warn" hidden></p>
+          <button type="button" class="reset" data-reset="ltl">Reset to example case</button>
+        </div>
+        <div class="calc-out">
+          <div class="headline" aria-live="polite" aria-atomic="true">
+            <span class="k">Loss-to-lease, occupied units</span>
+            <span class="v" id="l-ltl">$7,255 / mo</span>
+            <span class="s" id="l-sub"><b>$87,060</b> a year, 10.7% of in-place rent.</span>
+          </div>
+          <ul class="bars" id="l-bars"></ul>
+          <dl class="kv">
+            <div><dt>Physical occupancy</dt><dd id="l-phys">91.7%</dd></div>
+            <div><dt>Economic occupancy</dt><dd id="l-econ">82.7%</dd></div>
+            <div><dt>NOI uplift, net of fee</dt><dd id="l-up">$84,448</dd></div>
+            <div><dt>Value at cap rate</dt><dd id="l-val">$1,351,171</dd></div>
+          </dl>
+        </div>
+      </form>
+      <div class="calc-foot"><span>Loss-to-lease = market rent × occupied units − in-place rent. Economic occupancy = in-place rent ÷ market rent on all units.</span><a href="#rentroll">The full Rent Roll Analyzer, $69</a></div>
+    </div>
+  </div>
+</section>
+<section class="block" id="compare" aria-labelledby="compare-h">
+  <div class="container">
+    <header class="sec-head">
+      <div class="eyebrow">§ 03 · Which template</div>
+      <h2 id="compare-h">Pick by the question you have to answer</h2>
+    </header>
+    <table class="cmp">
+      <caption class="vh">Which template fits which job</caption>
+      <thead><tr><th scope="col">Template</th><th scope="col">Use it when</th><th scope="col">What comes out</th><th scope="col">Period</th><th scope="col" class="pr">Price</th></tr></thead>
+      <tbody><tr><th scope="row"><a href="#dscr">DSCR Debt Sizing</a></th><td data-l="Use it when">You have a stabilized property and a term sheet, and need the loan a lender will actually size.</td>
+<td data-l="What comes out">Max loan, binding constraint, amortization, two stress grids</td><td data-l="Period" class="hz">One loan · 360 months</td><td data-l="Price" class="pr">$79</td></tr><tr><th scope="row"><a href="#waterfall">Equity Waterfall</a></th><td data-l="Use it when">You are raising or reviewing JV equity and need to see who gets what at each hurdle.</td>
+<td data-l="What comes out">LP and GP IRR and MOIC, promote dollars, LP give-up</td><td data-l="Period" class="hz">Annual · 10 years</td><td data-l="Price" class="pr">$89</td></tr><tr><th scope="row"><a href="#rentroll">Rent Roll Analyzer</a></th><td data-l="Use it when">You have a unit-level rent roll and need to know what in-place income is really worth.</td>
+<td data-l="What comes out">Loss-to-lease, economic occupancy, rollover, in-place vs mark-to-market value</td><td data-l="Period" class="hz">Snapshot · up to 150 units</td><td data-l="Price" class="pr">$69</td></tr><tr><th scope="row"><a href="#construction">Construction Loan</a></th><td data-l="Use it when">You are building from the ground up and need the construction loan, the equity and the interest reserve.</td>
+<td data-l="What comes out">Commitment, monthly draws, reserve, takeout, development yield</td><td data-l="Period" class="hz">Monthly · 48 months</td><td data-l="Price" class="pr">$129</td></tr><tr><th scope="row"><a href="#debtfund">Debt Fund Model</a></th><td data-l="Use it when">You are raising or diligencing a credit fund and need LP returns net of everything.</td>
+<td data-l="What comes out">LP net IRR, MOIC, DPI, TVPI, gross-to-net bridge, carry</td><td data-l="Period" class="hz">Annual · 10 years</td><td data-l="Price" class="pr">$169</td></tr><tr><th scope="row"><a href="#bridge">Bridge-to-Agency Refi</a></th><td data-l="Use it when">You are buying value-add with bridge debt and must show the agency refinance repays it.</td>
+<td data-l="What comes out">Bridge sizing, renovation roll-up, agency takeout, LP/GP returns</td><td data-l="Period" class="hz">Monthly · 60 months</td><td data-l="Price" class="pr">$139</td></tr><tr><th scope="row"><a href="#storage">Self-Storage Lease-Up</a></th><td data-l="Use it when">You are buying a storage facility that is not yet stabilized and need to price the lease-up.</td>
+<td data-l="What comes out">Absorption, stabilized NOI, loan sizing, levered and unlevered returns</td><td data-l="Period" class="hz">Monthly · 120 months</td><td data-l="Price" class="pr">$119</td></tr></tbody>
+    </table>
+  </div>
+</section>
+<section class="block" id="guides" aria-labelledby="guides-h">
+  <div class="container">
+    <header class="sec-head">
+      <div class="eyebrow">§ 04 · Guides</div>
+      <h2 id="guides-h">The arithmetic, explained with worked examples</h2>
+      <p>Plain explanations of what each template computes, using numbers from the templates' own example cases.</p>
+    </header>
+    <ul class="glist"><li><a href="/why-dscr-binds-before-ltv-when-rates-rise"><span class="k">Debt sizing</span><span class="t">Why DSCR Binds Before LTV When Rates Rise</span><span class="d">The crossover rate at which a 1.25x DSCR floor overtakes a 70% LTV cap, and what each 25 bps costs in proceeds.</span></a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan"><span class="k">Debt sizing</span><span class="t">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</span><span class="d">What each of the three sizing tests protects against, and how they hand off to each other as rates and prices move.</span></a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll"><span class="k">Rent roll analysis</span><span class="t">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</span><span class="d">Computing loss-to-lease from a unit-level roll, and why economic occupancy and expiration concentration decide whether it is real.</span></a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example"><span class="k">Equity structures</span><span class="t">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</span><span class="d">A three-hurdle LP/GP waterfall traced tier by tier through the capital accounts, with the promote and the LP&#x27;s IRR give-up.</span></a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan"><span class="k">Risk analysis</span><span class="t">Break-Even Occupancy and Stress Testing a Loan</span><span class="d">Break-even occupancy on the amortizing payment, two stress grids, and the cell where DSCR falls below 1.0x.</span></a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test"><span class="k">Loan structure</span><span class="t">Interest-Only Periods and DSCR: What Lenders Actually Test</span><span class="d">Why DSCR is sized on the amortizing payment during an IO period, the leverage the IO convention would add, and the balloon it leaves.</span></a></li></ul>
+  </div>
+</section>
+<section class="block" id="faq" aria-labelledby="faq-h">
+  <div class="container">
+    <header class="sec-head">
+      <div class="eyebrow">§ 05 · Questions</div>
+      <h2 id="faq-h">Before you buy</h2>
+    </header>
+    <div class="faq"><details><summary>Can I edit the formulas?</summary><p>Yes. Nothing is locked or hidden. Inputs are blue text, formulas are black and cross-sheet links are green; the primary inputs carry a yellow fill. No macros, no data tables, no external links.</p></details><details><summary>Which software do I need?</summary><p>Excel 2016 or later, or LibreOffice. The files are plain .xlsx.</p></details><details><summary>What if it doesn&#x27;t do what the listing says?</summary><p>Email thehelp@inkboxmail.com within 14 days of purchase and you will get a refund. Purchases made on eFinancialModels follow that marketplace&#x27;s refund terms.</p></details><details><summary>Who built these?</summary><p>An AI system did the modelling, under a standing specification from a finance professional, and recalculates every file with an independent engine before release. Questions sent to the support inbox are answered by the same system; anything it cannot resolve is escalated to a person.</p></details><details><summary>Where do I buy?</summary><p>Each template is sold on Gumroad, which handles payment and the instant download. The same files are also listed in the Lender Ready Models store on eFinancialModels.com.</p></details><details><summary>Is this advice?</summary><p>No. These are modelling tools. Match the inputs to your own term sheet, loan documents or operating agreement before relying on any output.</p></details></div>
+  </div>
+</section>
+</main>
+<footer class="site-foot">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <p class="brandline">Lender Ready Models</p>
+        <p class="disc">Built and tested by an AI system under a finance professional&#x27;s specification; every workbook is recalculated with an independent engine before release. Modelling tools, not financial, investment, lending or legal advice.</p>
+        <p>Support: <a href="mailto:thehelp@inkboxmail.com">thehelp@inkboxmail.com</a></p>
+        <p>Sold on <a href="https://mcginspark.gumroad.com" rel="noopener">Gumroad</a> and <a href="https://www.efinancialmodels.com/vendor/mcginvs" rel="noopener">eFinancialModels.com</a>.</p>
+      </div>
+      <nav aria-label="Templates"><h2>Templates</h2><ul><li><a href="/#dscr">DSCR Debt Sizing</a> <span class="num">$79</span></li><li><a href="/#waterfall">Equity Waterfall</a> <span class="num">$89</span></li><li><a href="/#rentroll">Rent Roll Analyzer</a> <span class="num">$69</span></li><li><a href="/#construction">Construction Loan</a> <span class="num">$129</span></li><li><a href="/#debtfund">Debt Fund Model</a> <span class="num">$169</span></li><li><a href="/#bridge">Bridge-to-Agency Refi</a> <span class="num">$139</span></li><li><a href="/#storage">Self-Storage Lease-Up</a> <span class="num">$119</span></li></ul></nav>
+      <nav aria-label="Guides"><h2>Guides</h2><ul><li><a href="/why-dscr-binds-before-ltv-when-rates-rise">Why DSCR Binds Before LTV When Rates Rise</a></li><li><a href="/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan">Debt Yield vs DSCR vs LTV: How Lenders Size a Loan</a></li><li><a href="/loss-to-lease-explained-multifamily-rent-roll">Loss-to-Lease Explained: Reading a Multifamily Rent Roll</a></li><li><a href="/equity-waterfall-irr-hurdles-promote-worked-example">Equity Waterfall with IRR Hurdles and Promote: A Worked Example</a></li><li><a href="/break-even-occupancy-and-stress-testing-a-loan">Break-Even Occupancy and Stress Testing a Loan</a></li><li><a href="/interest-only-period-dscr-what-lenders-actually-test">Interest-Only Periods and DSCR: What Lenders Actually Test</a></li></ul></nav>
+    </div>
+    <p class="fine">Example figures on this site come from the templates' own example cases and are illustrative only. Single-user licence per purchase.</p>
+  </div>
+</footer>
+<dialog class="lb" id="lb" aria-labelledby="lb-title">
+  <div class="lb-wrap">
+    <div class="lb-top"><h2 id="lb-title">Sheet</h2><button type="button" class="lb-close">Close<span class="vh"> image viewer</span></button></div>
+    <div class="lb-stage"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" width="1" height="1"></div>
+    <div class="lb-bot"><span class="lb-cap" id="lb-cap" aria-live="polite"></span>
+      <div class="nav"><button type="button" class="lb-prev" aria-label="Previous sheet">← Prev</button><button type="button" class="lb-next" aria-label="Next sheet">Next →</button></div></div>
+  </div>
+</dialog>
+<script type="application/json" id="gal">{"dscr": {"name": "DSCR Debt Sizing & Loan Underwriting Model", "items": [{"src": "/img/dscr-1-dashboard.webp", "w": 1226, "h": 699, "label": "Dashboard", "alt": "DSCR Debt Sizing & Loan Underwriting Model: Dashboard sheet, example case"}, {"src": "/img/dscr-2-debt-sizing.webp", "w": 1144, "h": 1135, "label": "Debt Sizing", "alt": "DSCR Debt Sizing & Loan Underwriting Model: Debt Sizing sheet, example case"}, {"src": "/img/dscr-3-sensitivity.webp", "w": 1474, "h": 904, "label": "Sensitivity", "alt": "DSCR Debt Sizing & Loan Underwriting Model: Sensitivity sheet, example case"}, {"src": "/img/dscr-4-noi-build.webp", "w": 968, "h": 758, "label": "NOI Build", "alt": "DSCR Debt Sizing & Loan Underwriting Model: NOI Build sheet, example case"}, {"src": "/img/dscr-5-inputs.webp", "w": 1064, "h": 1126, "label": "Inputs", "alt": "DSCR Debt Sizing & Loan Underwriting Model: Inputs sheet, example case"}, {"src": "/img/dscr-6-amortization.webp", "w": 1357, "h": 918, "label": "Amortization", "alt": "DSCR Debt Sizing & Loan Underwriting Model: Amortization sheet, example case"}]}, "waterfall": {"name": "Equity Waterfall Model (IRR Hurdles & Promote)", "items": [{"src": "/img/waterfall-1-returns.webp", "w": 1594, "h": 802, "label": "Returns", "alt": "Equity Waterfall Model (IRR Hurdles & Promote): Returns sheet, example case"}, {"src": "/img/waterfall-2-waterfall.webp", "w": 1299, "h": 1136, "label": "Waterfall", "alt": "Equity Waterfall Model (IRR Hurdles & Promote): Waterfall sheet, example case"}, {"src": "/img/waterfall-3-inputs.webp", "w": 1600, "h": 538, "label": "Inputs", "alt": "Equity Waterfall Model (IRR Hurdles & Promote): Inputs sheet, example case"}, {"src": "/img/waterfall-4-sensitivity.webp", "w": 1600, "h": 348, "label": "Sensitivity", "alt": "Equity Waterfall Model (IRR Hurdles & Promote): Sensitivity sheet, example case"}, {"src": "/img/waterfall-5-readme.webp", "w": 1277, "h": 1124, "label": "README", "alt": "Equity Waterfall Model (IRR Hurdles & Promote): README sheet, example case"}]}, "rentroll": {"name": "Multifamily Rent Roll Analyzer", "items": [{"src": "/img/rentroll-1-analysis.webp", "w": 1349, "h": 1120, "label": "Analysis", "alt": "Multifamily Rent Roll Analyzer: Analysis sheet, example case"}, {"src": "/img/rentroll-2-rent-roll.webp", "w": 1600, "h": 1027, "label": "Rent Roll", "alt": "Multifamily Rent Roll Analyzer: Rent Roll sheet, example case"}, {"src": "/img/rentroll-3-expirations.webp", "w": 1585, "h": 613, "label": "Expirations", "alt": "Multifamily Rent Roll Analyzer: Expirations sheet, example case"}, {"src": "/img/rentroll-4-unit-mix.webp", "w": 1600, "h": 373, "label": "Unit Mix", "alt": "Multifamily Rent Roll Analyzer: Unit Mix sheet, example case"}, {"src": "/img/rentroll-5-readme.webp", "w": 1327, "h": 993, "label": "README", "alt": "Multifamily Rent Roll Analyzer: README sheet, example case"}]}, "construction": {"name": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve", "items": [{"src": "/img/construction-1-dashboard.webp", "w": 1299, "h": 1124, "label": "Dashboard", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Dashboard sheet, example case"}, {"src": "/img/construction-2-sources-uses.webp", "w": 1238, "h": 1126, "label": "Sources & Uses", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Sources & Uses sheet, example case"}, {"src": "/img/construction-3-draw-schedule.webp", "w": 1600, "h": 548, "label": "Draw Schedule", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Draw Schedule sheet, example case"}, {"src": "/img/construction-4-takeout.webp", "w": 1508, "h": 1121, "label": "Takeout", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Takeout sheet, example case"}, {"src": "/img/construction-5-sensitivity.webp", "w": 1600, "h": 1007, "label": "Sensitivity", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Sensitivity sheet, example case"}, {"src": "/img/construction-6-inputs.webp", "w": 1195, "h": 1127, "label": "Inputs", "alt": "Construction Loan Model: Sources & Uses, Draw Schedule & Interest Reserve: Inputs sheet, example case"}]}, "debtfund": {"name": "Private Credit / Real Estate Debt Fund Model", "items": [{"src": "/img/debtfund-1-dashboard.webp", "w": 1597, "h": 947, "label": "Dashboard", "alt": "Private Credit / Real Estate Debt Fund Model: Dashboard sheet, example case"}, {"src": "/img/debtfund-2-returns.webp", "w": 1599, "h": 1032, "label": "Returns", "alt": "Private Credit / Real Estate Debt Fund Model: Returns sheet, example case"}, {"src": "/img/debtfund-3-fund-model.webp", "w": 1066, "h": 1135, "label": "Fund Model", "alt": "Private Credit / Real Estate Debt Fund Model: Fund Model sheet, example case"}, {"src": "/img/debtfund-4-sensitivity.webp", "w": 1600, "h": 708, "label": "Sensitivity", "alt": "Private Credit / Real Estate Debt Fund Model: Sensitivity sheet, example case"}, {"src": "/img/debtfund-5-inputs.webp", "w": 1531, "h": 1134, "label": "Inputs", "alt": "Private Credit / Real Estate Debt Fund Model: Inputs sheet, example case"}, {"src": "/img/debtfund-6-readme.webp", "w": 765, "h": 1134, "label": "README", "alt": "Private Credit / Real Estate Debt Fund Model: README sheet, example case"}]}, "bridge": {"name": "Bridge-to-Agency Refinance Model (Value-Add Multifamily)", "items": [{"src": "/img/bridge-1-dashboard.webp", "w": 1159, "h": 1122, "label": "Dashboard", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Dashboard sheet, example case"}, {"src": "/img/bridge-2-agency-takeout.webp", "w": 1528, "h": 1086, "label": "Agency Takeout", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Agency Takeout sheet, example case"}, {"src": "/img/bridge-3-returns.webp", "w": 1600, "h": 1064, "label": "Returns", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Returns sheet, example case"}, {"src": "/img/bridge-4-renovation.webp", "w": 1600, "h": 616, "label": "Renovation", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Renovation sheet, example case"}, {"src": "/img/bridge-5-bridge-loan.webp", "w": 1385, "h": 1123, "label": "Bridge Loan", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Bridge Loan sheet, example case"}, {"src": "/img/bridge-6-sensitivity.webp", "w": 1600, "h": 1021, "label": "Sensitivity", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Sensitivity sheet, example case"}, {"src": "/img/bridge-7-inputs.webp", "w": 842, "h": 1132, "label": "Inputs", "alt": "Bridge-to-Agency Refinance Model (Value-Add Multifamily): Inputs sheet, example case"}]}, "storage": {"name": "Self-Storage Acquisition & Lease-Up Underwriting Model", "items": [{"src": "/img/storage-1-dashboard.webp", "w": 1178, "h": 1130, "label": "Dashboard", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Dashboard sheet, example case"}, {"src": "/img/storage-2-lease-up.webp", "w": 1594, "h": 591, "label": "Lease-Up", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Lease-Up sheet, example case"}, {"src": "/img/storage-3-debt.webp", "w": 971, "h": 1122, "label": "Debt", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Debt sheet, example case"}, {"src": "/img/storage-4-returns.webp", "w": 839, "h": 1123, "label": "Returns", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Returns sheet, example case"}, {"src": "/img/storage-5-unit-mix.webp", "w": 1600, "h": 678, "label": "Unit Mix", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Unit Mix sheet, example case"}, {"src": "/img/storage-6-sensitivity.webp", "w": 1311, "h": 1131, "label": "Sensitivity", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Sensitivity sheet, example case"}, {"src": "/img/storage-7-inputs.webp", "w": 1142, "h": 1138, "label": "Inputs", "alt": "Self-Storage Acquisition & Lease-Up Underwriting Model: Inputs sheet, example case"}]}}</script>
+<script>
+(function(){
+'use strict';
+var G=JSON.parse(document.getElementById('gal').textContent);
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- galleries ---------- */
+function select(gid,i,focus){
+  var root=$('[data-gallery="'+gid+'"]'); if(!root) return;
+  var it=G[gid].items[i], img=$('.stage-btn img',root), tabs=$$('[role=tab]',root);
+  img.src=it.src; img.width=it.w; img.height=it.h; img.alt=it.alt;
+  $('.stage-btn',root).setAttribute('aria-label','Enlarge '+it.label+' sheet');
+  $('.stage-cap b',root).textContent=it.label; $('.stage-cap .n',root).textContent=i+1;
+  $('.stage',root).setAttribute('aria-labelledby',tabs[i].id);
+  root.setAttribute('data-idx',i);
+  tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i?'true':'false');t.tabIndex=k===i?0:-1;});
+  if(focus){tabs[i].focus();}
+  tabs[i].scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});
+}
+$$('[data-gallery]').forEach(function(root){
+  var gid=root.getAttribute('data-gallery'), tabs=$$('[role=tab]',root);
+  tabs.forEach(function(t,k){
+    t.addEventListener('click',function(){select(gid,k)});
+    t.addEventListener('keydown',function(e){
+      var L=tabs.length,n=null;
+      if(e.key==='ArrowRight')n=(k+1)%L; else if(e.key==='ArrowLeft')n=(k-1+L)%L;
+      else if(e.key==='Home')n=0; else if(e.key==='End')n=L-1;
+      if(n!==null){e.preventDefault();select(gid,n,true);}
+    });
+    t.addEventListener('pointerenter',function(){var im=new Image();im.src=G[gid].items[k].src;},{once:true});
+  });
+  $('.stage-btn',root).addEventListener('click',function(e){openLB(gid,+root.getAttribute('data-idx')||0,e.currentTarget)});
+});
+$$('[data-open]').forEach(function(b){b.addEventListener('click',function(){openLB(b.getAttribute('data-open'),+b.getAttribute('data-i')||0,b)})});
+
+/* ---------- lightbox ---------- */
+var lb=$('#lb'), cur={g:null,i:0,op:null};
+function render(){
+  var g=G[cur.g], it=g.items[cur.i], im=$('.lb-stage img',lb);
+  im.src=it.src; im.width=it.w; im.height=it.h; im.alt=it.alt;
+  $('#lb-title').textContent=g.name;
+  $('#lb-cap').textContent=it.label+' · '+(cur.i+1)+' of '+g.items.length;
+  var n=g.items[(cur.i+1)%g.items.length]; var pre=new Image(); pre.src=n.src;
+}
+function openLB(g,i,op){
+  cur={g:g,i:i,op:op}; render();
+  if(typeof lb.showModal==='function'){lb.showModal();} else {lb.setAttribute('open','');}
+  document.documentElement.classList.add('lb-open');
+  $('.lb-close',lb).focus();
+}
+function step(d){var L=G[cur.g].items.length; cur.i=(cur.i+d+L)%L; render(); select(cur.g,cur.i);}
+function closeLB(){ if(lb.open){ if(typeof lb.close==='function')lb.close(); else {lb.removeAttribute('open'); onClose();} } }
+function onClose(){document.documentElement.classList.remove('lb-open'); if(cur.op)cur.op.focus();}
+$('.lb-prev',lb).addEventListener('click',function(){step(-1)});
+$('.lb-next',lb).addEventListener('click',function(){step(1)});
+$('.lb-close',lb).addEventListener('click',closeLB);
+lb.addEventListener('close',onClose);
+lb.addEventListener('click',function(e){ if(e.target===lb||e.target.classList.contains('lb-stage')) closeLB(); });
+lb.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'){e.preventDefault();step(1);}
+  else if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}
+  else if(e.key==='Escape'){e.preventDefault();closeLB();}
+  else if(e.key==='Tab'){
+    var f=$$('button',lb), first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    else if(f.indexOf(document.activeElement)<0){e.preventDefault();first.focus();}
+  }
+});
+
+/* ---------- formatting ---------- */
+function usd(v){return isFinite(v)?'$'+Math.round(v).toLocaleString('en-US'):'—'}
+function pct(v,d){return isFinite(v)?(v*100).toFixed(d==null?1:d)+'%':'—'}
+function num(el){var v=parseFloat(el.value);el.setAttribute('aria-invalid',(isFinite(v)&&v>=0)?'false':'true');return v}
+
+/* ---------- loan sizer ---------- */
+var S=$('#sizer');
+function sizer(){
+  var E=S.elements, noi=num(E.noi), price=num(E.price), rate=num(E.rate)/100, am=num(E.amort),
+      ltv=num(E.ltv)/100, dscr=num(E.dscr), dy=num(E.dy)/100;
+  var ok=[noi,price,am,ltv,dscr,dy].every(function(x){return isFinite(x)&&x>0})&&isFinite(rate)&&rate>=0;
+  var bars=$$('#o-bars li');
+  if(!ok){$('#o-loan').textContent='—';$('#o-bind').textContent='Enter positive values in every field.';
+    ['o-ltv','o-dscr','o-dy','o-k'].forEach(function(id){$('#'+id).textContent='—'});
+    bars.forEach(function(li){$('.val',li).textContent='—';$('.fill',li).style.width='0';li.classList.remove('bind')});return;}
+  var r=rate/12, n=Math.round(am*12), k=12*(r===0?1/n:r/(1-Math.pow(1+r,-n)));
+  var L={ltv:price*ltv, dscr:noi/(dscr*k), dy:noi/dy};
+  var keys=['ltv','dscr','dy'], bind=keys.reduce(function(a,b){return L[b]<L[a]?b:a});
+  var mx=Math.max(L.ltv,L.dscr,L.dy), loan=Math.floor(L[bind]/1000)*1000;
+  var names={ltv:'Loan-to-value',dscr:'DSCR',dy:'Debt yield'};
+  $('#o-loan').textContent=usd(loan);
+  $('#o-bind').innerHTML='<b>'+names[bind]+'</b> is the binding constraint.';
+  bars.forEach(function(li){var kk=li.getAttribute('data-k');$('.val',li).textContent=usd(L[kk]);
+    $('.fill',li).style.width=(L[kk]/mx*100).toFixed(1)+'%';li.classList.toggle('bind',kk===bind);});
+  $('#o-ltv').textContent=pct(loan/price); $('#o-dscr').textContent=loan>0?(noi/(loan*k)).toFixed(2)+'x':'—';
+  $('#o-dy').textContent=loan>0?pct(noi/loan,2):'—'; $('#o-k').textContent=pct(k,2);
+}
+S.addEventListener('input',sizer);
+
+/* ---------- loss-to-lease ---------- */
+var T=$('#ltl');
+function ltl(){
+  var rows=$$('.ltl-row',T), tot={u:0,o:0,i:0,mAll:0,mOcc:0}, per=[], bad=false, warn='';
+  rows.forEach(function(fs){
+    var g=function(k){return num($('[data-k="'+k+'"]',fs))};
+    var u=g('u'),o=g('o'),i=g('i'),m=g('m');
+    if(![u,o,i,m].every(function(x){return isFinite(x)&&x>=0})){bad=true;return;}
+    if(o>u){warn='Occupied units cannot exceed total units ('+$('.legend',fs).textContent+').';}
+    tot.u+=u;tot.o+=o;tot.i+=i;tot.mAll+=u*m;tot.mOcc+=o*m;
+    per.push({t:$('.legend',fs).textContent,ltl:o*m-i,pu:o>0?(o*m-i)/o:0});
+  });
+  var fee=num(T.elements.fee)/100, cap=num(T.elements.cap)/100;
+  var w=$('#ltl-warn'); w.hidden=!warn; w.textContent=warn;
+  if(bad||!(cap>0)||!(fee>=0&&fee<1)||tot.u<=0||tot.i<=0){
+    $('#l-ltl').textContent='—';$('#l-sub').textContent='Enter non-negative values; units, in-place rent and cap rate must be above zero.';
+    ['l-phys','l-econ','l-up','l-val'].forEach(function(id){$('#'+id).textContent='—'});$('#l-bars').innerHTML='';return;}
+  var L=tot.mOcc-tot.i, A=L*12, up=A*(1-fee);
+  $('#l-ltl').textContent=usd(L)+' / mo';
+  $('#l-sub').innerHTML='<b>'+usd(A)+'</b> a year, '+pct(L/tot.i)+' of in-place rent'+(L<0?' (in-place rents are above your market assumption).':'.');
+  $('#l-phys').textContent=pct(tot.o/tot.u); $('#l-econ').textContent=pct(tot.i/tot.mAll);
+  $('#l-up').textContent=usd(up); $('#l-val').textContent=usd(up/cap);
+  var mx=Math.max.apply(null,per.map(function(p){return Math.abs(p.pu)}).concat([1]));
+  $('#l-bars').innerHTML=per.map(function(p){
+    return '<li><span class="lab">'+p.t+' · per occupied unit</span><span class="val">'+usd(p.pu)+' / mo</span><span class="track"><span class="fill" style="width:'+(Math.abs(p.pu)/mx*100).toFixed(1)+'%"></span></span></li>';
+  }).join('');
+}
+T.addEventListener('input',ltl);
+
+$$('[data-reset]').forEach(function(b){b.addEventListener('click',function(){
+  var f=$('#'+b.getAttribute('data-reset')); $$('input',f).forEach(function(i){i.value=i.getAttribute('data-default')});
+  f.id==='sizer'?sizer():ltl();
+})});
+sizer(); ltl();
+})();
+</script>
 </body>
 </html>
