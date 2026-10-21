@@ -1,0 +1,30 @@
+# Lender Ready Models
+
+> Excel templates for commercial real estate loan underwriting: debt sizing under LTV, DSCR and debt yield; construction and bridge loans; equity waterfalls; rent roll analysis; self-storage lease-up; and real estate debt fund returns. Plain .xlsx files with live formulas, no macros. Built by an AI system under a finance professional's specification and recalculated with an independent engine before release. Modelling tools, not financial, investment, lending or legal advice.
+
+## Templates (price in USD, sold on Gumroad)
+- [DSCR Debt Sizing & Loan Underwriting Model](https://lender-ready-models.onrender.com/#dscr): $79. Sizes the maximum loan under LTV, DSCR and debt yield, shows which test binds, and stresses rate and NOI.
+- [Equity Waterfall Model (IRR Hurdles & Promote)](https://lender-ready-models.onrender.com/#waterfall): $89. LP/GP distribution waterfall with up to four IRR hurdle tiers.
+- [Multifamily Rent Roll Analyzer](https://lender-ready-models.onrender.com/#rentroll): $69. Loss-to-lease, physical and economic occupancy, lease expirations, in-place versus mark-to-market NOI.
+- [Construction Loan Model](https://lender-ready-models.onrender.com/#construction): $129. Sources and uses, S-curve draw schedule with retainage, interest reserve, permanent-loan takeout test.
+- [Private Credit / Real Estate Debt Fund Model](https://lender-ready-models.onrender.com/#debtfund): $169. Ten-year closed-end debt fund with credit losses, subscription line, fees and a European waterfall.
+- [Bridge-to-Agency Refinance Model](https://lender-ready-models.onrender.com/#bridge): $139. Value-add multifamily bridge loan through an agency takeout.
+- [Self-Storage Acquisition & Lease-Up Underwriting Model](https://lender-ready-models.onrender.com/#storage): $119. Unit mix, absorption, loan sizing and LP/GP returns.
+
+## Free calculators
+- [Debt yield calculator](https://lender-ready-models.onrender.com/debt-yield-calculator): debt yield on a loan, and the maximum loan under debt yield, DSCR and LTV.
+- [Loss-to-lease calculator](https://lender-ready-models.onrender.com/#calc): loss-to-lease and mark-to-market value from a unit-type rent roll.
+
+## Guides
+- [Why DSCR Binds Before LTV When Rates Rise](https://lender-ready-models.onrender.com/why-dscr-binds-before-ltv-when-rates-rise)
+- [Debt Yield vs DSCR vs LTV: How Lenders Size a Loan](https://lender-ready-models.onrender.com/debt-yield-vs-dscr-vs-ltv-how-lenders-size-a-loan)
+- [Loss-to-Lease Explained: Reading a Multifamily Rent Roll](https://lender-ready-models.onrender.com/loss-to-lease-explained-multifamily-rent-roll)
+- [Equity Waterfall with IRR Hurdles and Promote: A Worked Example](https://lender-ready-models.onrender.com/equity-waterfall-irr-hurdles-promote-worked-example)
+- [Break-Even Occupancy and Stress Testing a Loan](https://lender-ready-models.onrender.com/break-even-occupancy-and-stress-testing-a-loan)
+- [Interest-Only Periods and DSCR: What Lenders Actually Test](https://lender-ready-models.onrender.com/interest-only-period-dscr-what-lenders-actually-test)
+
+## Purchase, format and support
+- Store: https://mcginspark.gumroad.com (payment and instant download). The same files are also listed at https://www.efinancialmodels.com/vendor/mcginvs
+- Format: .xlsx for Excel 2016 or later, or LibreOffice. Nothing locked or hidden.
+- Refunds: email within 14 days of purchase if a template does not do what its listing says. eFinancialModels purchases follow that marketplace's terms.
+- Support: thehelp@inkboxmail.com
